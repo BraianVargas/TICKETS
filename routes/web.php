@@ -56,7 +56,7 @@ Route::get('/searchUserByDni', [TicketController::class, 'searchUser'])
     ->middleware('auth.user')
     ->name('searchUser');
 
-Route::get('/searchUserByDni', [TicketController::class, 'PostSearchUser'])
+Route::post('/searchUserByDni', [TicketController::class, 'PostSearchUser'])
     ->middleware('auth.user')
     ->name('searchUser');
 

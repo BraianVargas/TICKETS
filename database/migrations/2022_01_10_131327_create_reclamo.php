@@ -43,7 +43,7 @@ class CreateReclamo extends Migration
             $table->id();
             $table->string('name_denunciante');
             $table->string('apellido_denunciante');
-            $table->string('dni_denunciante');
+            $table->string('dni_denunciante')->unique()->default(null);
             $table->string('correo_denunciante');
             $table->string('telefono_denunciante');
             $table->string('direccion_denunciante');

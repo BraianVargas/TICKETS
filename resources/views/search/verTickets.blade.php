@@ -5,6 +5,7 @@
 @section('content')
 
 <div class="container">
+    <link rel="stylesheet" href="https://i.icomoon.io/public/temp/dbcba7dd7e/UntitledProject/style.css">
     <div class="row">
         <div class="col-12">
             <div class="panel panel-default">
@@ -50,7 +51,7 @@
                         </tr>
                     </thead>
                     @foreach ($tickets as $ticket)
-                    <tbody>
+                    <tbody class="col-12">
                         <tr>
                           <th scope="col-1">{{$ticket->id}}</th>
                           <th scope="col-1">{{$ticket->name_denunciante}} {{$ticket->apellido_denunciante}}</th>
@@ -59,11 +60,11 @@
                           <th scope="col-4">{{$ticket->asunto}}</th>
                           <th scope="col-1">{{$ticket->estado}}</th>
                           <th scope="col-2">
-                            <a href="" class="btn btn-primary col-6 justify-content-auto">
-                                <span class="icon-pencil"></span>
+                            <a href="" class="btn btn-primary">
+                                <span class="icon-pencil2"></span> Editar
                             </a>
-                            <a href="" class="btn btn-danger col-6 justify-content-auto">
-                                <span class="icon-bin"></span>
+                            <a href="" class="btn btn-danger">
+                                <span class="icon-bin2"></span> Borrar
                             </a>
                           </th>
                           {{-- {{route('ticket.destroy',$ticket->id)}}

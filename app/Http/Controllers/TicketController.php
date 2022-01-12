@@ -11,7 +11,8 @@ class TicketController extends Controller
 {
     public function create()
     {
-        return view('ticket.create');
+        $client = null;
+        return view('ticket.create', compact('client'));
     }
     
     public function store(){
@@ -36,17 +37,34 @@ class TicketController extends Controller
             'estado' => 'Abierto'
             ]
         );
+        // if dni denunciante is duplicated in denunciantes table then drop an alert
+        $client = Denunciante::where('dni_denunciante', request('dni_denunciante'))->first();
+        if($client){
+            $denunciado = Denunciado::create(
+                [
+                'razon_social' => request('razon_social'),
+                'objeto_denunciado' => request('objeto_denunciado'),
+                'direccion_denunciado' => request('direccion_denunciado'),
+                'departamento_denunciado' => request('departamento_denunciado'),
+                'provincia_denunciado' => request('provincia_denunciado'),
+                ]
+            );
 
-        $denunciante = Denunciante::create(
-            [
-            'name_denunciante' => request('name_denunciante'),
-            'apellido_denunciante' => request('apellido_denunciante'),
-            'dni_denunciante' => request('dni_denunciante'),
-            'correo_denunciante' => request('correo_denunciante'),
-            'telefono_denunciante' => request('telefono_denunciante'),
-            'direccion_denunciante' => request('direccion_denunciante'),
-            ]
-        );
+            $reclamo->save();
+            $denunciado->save();
+            return view('ticket.create', compact('client'));
+        }else{
+            $denunciante = Denunciante::create(
+                [
+                'name_denunciante' => request('name_denunciante'),
+                'apellido_denunciante' => request('apellido_denunciante'),
+                'dni_denunciante' => request('dni_denunciante'),
+                'correo_denunciante' => request('correo_denunciante'),
+                'telefono_denunciante' => request('telefono_denunciante'),
+                'direccion_denunciante' => request('direccion_denunciante'),
+                ]
+            );
+        }
         
         $denunciado = Denunciado::create(
             [
@@ -81,13 +99,16 @@ class TicketController extends Controller
     // search usre by dni
     public function searchUser()
     {
-        return view('search.searchUser');
+        $client = null;
+        return view('search.searchUser', compact("client"));
     }
 
     public function PostSearchUser()
     {
-        $client = Denunciante::where('dni_denunciante', request('dni_denunciante'))->first();
-        return view('search.searchUser', compact('client'));
+        $client = Denunciante::where('dni_denunciante', request('dni'))->first();
+
+        return view('ticket.create', compact("client"));
+
     }
 
 }
