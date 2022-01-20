@@ -14,6 +14,7 @@ class Denunciante extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'denunciante_id',
         'name_denunciante',
         'apellido_denunciante',
         'dni_denunciante',

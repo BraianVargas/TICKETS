@@ -4,26 +4,27 @@
 
 @section('content')
 
-<div class="mt-4 col-12 col-md-6">
-    <div class="p-2 m-2 bg-white shadow rounded-3 col-12 col-md-9 justify-content-left">
-        <a class="text-decoration-none fs-4 text-black m-2" href="{{route('create-ticket')}}">
-            Nuevo Ticket
-        </a>
-    </div>
-    <div class="p-2 m-2 bg-white shadow rounded-3 col-12 col-md-9 justify-content-left">
-        <a class="text-decoration-none fs-4 text-black m-2" href="{{route('viewTicket')}}">
-            Ver Tickets activos / cerrados
-        </a>
-    </div>
-    <div class="p-2 m-2 bg-white shadow rounded-3 col-12 col-md-9 justify-content-left">
-        <a class="text-decoration-none fs-4 text-black m-2" href="{{route('home')}}">
-            Historial de tickets por cliente
-        </a>
-    </div>
-    <div class="p-2 m-2 bg-white shadow rounded-3 col-12 col-md-9 justify-content-left">
-        <a class="text-decoration-none fs-4 text-black m-2" href="{{route('home')}}">
-            Buscar ticket
-        </a>
+<div class="mt-4 col-12  justify-conten-center text-center">
+    <h1 class="fw-bold text-uppercase">
+       Hola  {{ Auth::user()->name }}
+    </h1>
+    <div class="container">
+        <p class="fw-bold fs-5">
+            Elegir una opción
+        </p>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a href="{{route('tickets')}}" class="list-group-item-action active text-decoration-none">
+                    Tickets
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a href="" class="list-group-item-action active text-decoration-none">Clientes</a>
+            </li>
+            <li class="list-group-item">
+                <a href="" class="list-group-item-action active text-decoration-none">Cerrar Sesión</a>
+            </li>
+        </ul>
     </div>
     
 </div>

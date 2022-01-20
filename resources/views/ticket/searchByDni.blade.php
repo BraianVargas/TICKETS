@@ -12,7 +12,7 @@
                 <div class="panel-heading mt-3">
                     <h3 class="panel-title">Buscar Usuario</h3>
                 </div>
-                <form method="POST" action="{{ url('/searchUserByDni') }}">
+                <form method="POST" action="{{ route('searchTicketByDni') }}">
                     {{csrf_field()}}
                     <div class="row">
                         <div class="col-md-11 form-floating">

@@ -6,6 +6,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\ClientesController;
+
 
 
 Route::get('/', function () {
@@ -41,7 +43,7 @@ Route::get('/admin', [AdminController::class, 'index'])
     ->name('admin');
 
 Route::get('/user', [UserController::class, 'index'])
-    ->middleware('auth.user')
+    ->middleware('auth')
     ->name('user');
 
 Route::get('/create_ticket', [TicketController::class, 'create'])
@@ -63,3 +65,43 @@ Route::post('/searchUserByDni', [TicketController::class, 'PostSearchUser'])
 Route::get('/ver-tickets', [TicketController::class, 'show'])
     ->middleware('auth.user')
     ->name('viewTicket');
+
+Route::get('/ver-tickets/{dni}', [TicketController::class, 'showWithId'])
+    ->middleware('auth.user')
+    ->name('viewTicketWithId');
+
+Route::get('/tickets', [TicketController::class, 'index'])
+    ->middleware('auth.user')
+    ->name('tickets');
+
+Route::get('/clientes', [ClientesController::class, 'index'])
+    ->middleware('auth.user')
+    ->name('clientes');
+
+Route::get('/create-client', [ClientesController::class, 'create'])
+    ->middleware('auth.user')
+    ->name('create_client');
+
+Route::post('/create-client', [ClientesController::class, 'create_new'])
+    ->middleware('auth.user')
+    ->name('create_client');
+
+Route::get('/search-ticket/byDNI', [TicketController::class, 'searchTicketByDni'])
+    ->middleware('auth.user')
+    ->name('searchTicketByDni');
+
+Route::post('/search-ticket/byDNI', [TicketController::class, 'postSearchTicketByDni'])
+    ->middleware('auth.user')
+    ->name('searchTicketByDni');
+
+Route::get('/search-ticket/byId', [TicketController::class, 'searchTicketById'])
+    ->middleware('auth.user')
+    ->name('searchTicketById');
+
+Route::post('/search-ticket/byId', [TicketController::class, 'postSearchTicketById'])
+    ->middleware('auth.user')
+    ->name('searchTicketById');
+
+Route::get('/editTicket/{id}', [TicketController::class, 'editTicket'])
+    ->middleware('auth.user')
+    ->name('editTicket');

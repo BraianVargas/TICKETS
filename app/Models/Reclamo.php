@@ -15,17 +15,8 @@ class Reclamo extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name_denunciante',
-        'apellido_denunciante',
-        'dni_denunciante',
-        'correo_denunciante',
-        'telefono_denunciante',
-        'direccion_denunciante',
-        'razon_social',
-        'objeto_denunciado',
-        'direccion_denunciado',
-        'departamento_denunciado',
-        'provincia_denunciado',
+        'denunciante_id',
+        'denunciado_id',
         'asunto',
         'sector',
         'prioridad',
