@@ -171,6 +171,18 @@ class TicketController extends Controller
         $tickets = Reclamo::where('id', $id)->first();
         return view('ticket.edit', compact('tickets'));
     }
+
+    public function postEditTicket($id)
+    {
+        $tickets = Reclamo::where('id', $id)->first();
+        $tickets->sector = request('sector');
+        $tickets->prioridad = request('prioridad');
+        $tickets->comprobante_reclamo = request('comprobante_reclamo');
+        $tickets->motivo = request('motivo');
+        $tickets->estado = request('estado');
+        $tickets->save();
+        return back()->withErrors('success', 'Reclamo editado correctamente');
+    }
 }
 
 

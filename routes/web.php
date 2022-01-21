@@ -105,3 +105,7 @@ Route::post('/search-ticket/byId', [TicketController::class, 'postSearchTicketBy
 Route::get('/editTicket/{id}', [TicketController::class, 'editTicket'])
     ->middleware('auth.user')
     ->name('editTicket');
+
+Route::post('/editTicket/{id}', [TicketController::class, 'postEditTicket'])
+    ->middleware('auth.user')
+    ->name('editTicket');
