@@ -14,11 +14,10 @@ class Denunciado extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'denunciado_id',
-        'razon_social',
-        'objeto_denunciado',
-        'direccion_denunciado',
-        'departamento_denunciado',
-        'provincia_denunciado',
+        'razonSocial',
+        'objectService',
+        'location',
+        'department',
+        'province',
     ];
 }

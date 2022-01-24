@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Denunciante;
 
-class ClientesController extends Controller
+class CallersControllers extends Controller
 {
     public function index()
     {
@@ -19,7 +18,7 @@ class ClientesController extends Controller
 
     public function create_new()
     {
-        $client = Denunciante::where('dni_denunciante', request('dni_denunciante'))->first();
+        $client = Callers::where('dni', request('dni_denunciante'))->first();
         if($client != null)
         {
 

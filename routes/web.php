@@ -6,7 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TicketController;
-use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\CallersController;
 
 
 
@@ -33,7 +33,6 @@ Route::get('/logout',[SessionsController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-// Post Logout Route
 Route::post('/logout', [SessionsController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
@@ -74,15 +73,15 @@ Route::get('/tickets', [TicketController::class, 'index'])
     ->middleware('auth.user')
     ->name('tickets');
 
-Route::get('/clientes', [ClientesController::class, 'index'])
+Route::get('/clientes', [CallersController::class, 'index'])
     ->middleware('auth.user')
     ->name('clientes');
 
-Route::get('/create-client', [ClientesController::class, 'create'])
+Route::get('/create-client', [CallersController::class, 'create'])
     ->middleware('auth.user')
     ->name('create_client');
 
-Route::post('/create-client', [ClientesController::class, 'create_new'])
+Route::post('/create-client', [CallersController::class, 'create_new'])
     ->middleware('auth.user')
     ->name('create_client');
 

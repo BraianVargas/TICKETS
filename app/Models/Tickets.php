@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reclamo extends Model
+class Tickets extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'detail',
-        'ticket_id',
-        'user_id',
+        'subject',
+        'status',
+        'priority',
+        'sector',
+        'comprobante',
         'creation_datetime',
         'lastmodif_datetime',
+        'creator_id',
+        'modifier_id',
+        'caller_id',
+        'target_id',
     ];
 }

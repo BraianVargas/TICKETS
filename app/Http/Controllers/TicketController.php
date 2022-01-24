@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Denunciante;
+use App\Models\Callers;
+use App\Models\Tickets;
 use App\Models\Denunciado;
 use App\Models\Reclamo;
 
@@ -122,7 +123,7 @@ class TicketController extends Controller
 
     public function PostSearchUser()
     {
-        $client = Denunciante::where('dni_denunciante', request('dni'))->first();
+        $client = Callers::where('dni', request('dni'))->first();
 
         if($client){
             // return redirect('/create_ticket', 302, $client=[$result]);

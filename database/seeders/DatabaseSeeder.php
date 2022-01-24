@@ -31,15 +31,6 @@ class DatabaseSeeder extends Seeder
 
         $user->save();
 
-        $client=new Denunciante();
-        $client->name_denunciante='Braian';
-        $client->apellido_denunciante='Vargas';
-        $client->dni_denunciante='41830596';
-        $client->correo_denunciante='braianvargas1616@gmail.com';
-        $client->telefono_denunciante='2645819065';
-        $client->direccion_denunciante='CASA CASITA CASONA';
-
-        $client->save();
 
     }
 }
