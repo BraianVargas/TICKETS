@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Denunciado;
 use App\Models\Denunciante;
+use App\Models\User;
 
 class RegisterController extends Controller
 {

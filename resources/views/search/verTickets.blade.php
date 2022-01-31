@@ -25,130 +25,35 @@
                             <th scope="col-1">Producto / Servicio</th>
                             <th scope="col-4">Asunto</th>
                             <th scope="col-1">Estado</th>
+                            <th scope="col-1">Última Modificación</th>
                             <th scope="col-2">Acciónes</th>
                         </tr>
                     </thead>
-                    {{-- 
-                        SI SE RECIBE UN ARRAY DE TICKETS SE MUESTRAN TODOS VERIFICANDO QUE NO SEA UN ARRAY VACIO O UN OBJETO. 
-                        --}}
-                    @if(($tickets != null) & ($tickets instanceof(\App\Models\Reclamo::class) == false ) & (($tickets->count()) >= 1))
-                        @foreach ($tickets as $ticket)
-                            <tbody class="col-12">
-                                @if($ticket->estado == 'Abierto')
-                                    @if($ticket->prioridad == 'Alto' || $ticket->prioridad == 'Muy Alto')
-                                        <tr class="table-success">
-                                            <th scope="col-1">{{$ticket->id}}</th>
-                                            @if(($clientes instanceof \App\Models\Denunciante)==false)
-                                                @foreach ($clientes as $cliente)
-                                                    @if ($cliente->id == $ticket->denunciante_id)
-                                                        <th scope="col-1">{{$cliente->name_denunciante}} {{$cliente->apellido_denunciante}}</th>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                            @endif
-                                            @foreach ($denunciados as $denunciado)
-                                                @if ($denunciado->id == $ticket->denunciado_id)
-                                                    <th scope="col-1">{{$denunciado->razon_social}}</th>
-                                                    <th scope="col-1">{{$denunciado->objeto_denunciado}}</th>
-                                                @endif
-                                            @endforeach
-                                            <th scope="col-4">{{$ticket->asunto}}</th>
-                                            <th scope="col-1" class="bg-success p-2 text-dark bg-opacity-50">{{$ticket->estado}}</th>
-                                            <th scope="col-2">
-                                                <a href="{{ route('editTicket', ['id'=>$ticket->id]) }}" class="btn btn-success">
-                                                    <span class="icon-pencil2"></span> Editar
-                                                </a>
-                                            </th>
-                                        </tr>
+                    @if(($tickets != null) && (($tickets instanceof App\Models\Tickets) == false) )
+                        <tbody class="col-12">
+                            @foreach($tickets as $ticket)
+                                <tr>
+                                    <td>{{$ticket->id}}</td>
+                                    @php
+                                        $target = App\Models\Denunciado::where('id',$ticket->target_id)->first();
+                                        $caller = App\Models\Callers::where('id',$ticket->caller_id)->first();
+                                    @endphp
+                                    <td>{{$caller->name}}</td>
+                                    <td>{{$target->razonSocial}}</td>
+                                    <td>{{$target->objectService}}</td>
+                                    <td>{{$ticket->subject}}</td>
+                                    @if($ticket->status == 'Cerrado')
+                                        <td class="bg-danger p-2 text-dark bg-opacity-50">{{$ticket->status}}</td>
                                     @else
-                                        @if($ticket->prioridad == 'Medio')
-                                            <tr class="table-warning">
-                                                <th scope="col-1">{{$ticket->id}}</th>
-                                                @if(($clientes instanceof \App\Models\Denunciante)==false)
-                                                    @foreach ($clientes as $cliente)
-                                                        @if ($cliente->id == $ticket->denunciante_id)
-                                                            <th scope="col-1">{{$cliente->name_denunciante}} {{$cliente->apellido_denunciante}}</th>
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                                @endif
-                                                @foreach ($denunciados as $denunciado)
-                                                    @if ($denunciado->id == $ticket->denunciado_id)
-                                                        <th scope="col-1">{{$denunciado->razon_social}}</th>
-                                                        <th scope="col-1">{{$denunciado->objeto_denunciado}}</th>
-                                                    @endif
-                                                @endforeach
-                                                <th scope="col-4">{{$ticket->asunto}}</th>
-                                                <th scope="col-1" class="bg-success p-2 text-dark bg-opacity-50">{{$ticket->estado}}</th>
-                                                <th scope="col-2">
-                                                    <a href="{{ route('editTicket', ['id'=>$ticket->id]) }}" class="btn btn-success">
-                                                        <span class="icon-pencil2"></span> Editar
-                                                    </a>
-                                                </th>
-                                            </tr>
-                                        @else
-                                            @if($ticket->prioridad == 'Bajo' || $ticket->prioridad =='Muy bajo')
-                                                <tr class="table-secondary">
-                                                    <th scope="col-1">{{$ticket->id}}</th>
-                                                    @if(($clientes instanceof \App\Models\Denunciante)==false)
-                                                        @foreach ($clientes as $cliente)
-                                                            @if ($cliente->id == $ticket->denunciante_id)
-                                                                <th scope="col-1">{{$cliente->name_denunciante}} {{$cliente->apellido_denunciante}}</th>
-                                                            @endif
-                                                        @endforeach
-                                                    @else
-                                                        <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                                    @endif
-                                                    @foreach ($denunciados as $denunciado)
-                                                        @if ($denunciado->id == $ticket->denunciado_id)
-                                                            <th scope="col-1">{{$denunciado->razon_social}}</th>
-                                                            <th scope="col-1">{{$denunciado->objeto_denunciado}}</th>
-                                                        @endif
-                                                    @endforeach
-                                                    <th scope="col-4">{{$ticket->asunto}}</th>
-                                                    <th scope="col-1" class="bg-success p-2 text-dark bg-opacity-50">{{$ticket->estado}}</th>
-                                                    <th scope="col-2">
-                                                        <a href="{{ route('editTicket', ['id'=>$ticket->id]) }}" class="btn btn-success">
-                                                            <span class="icon-pencil2"></span> Editar
-                                                        </a>
-                                                    </th>
-                                                </tr>
-                                            @endif
-                                        @endif
+                                        <td class="bg-success p-2 text-dark bg-opacity-50">{{$ticket->status}}</td>
                                     @endif
-                                @else
-                                    <tr>
-                                        <th scope="col-1">{{$ticket->id}}</th>
-                                        @if(($clientes instanceof \App\Models\Denunciante)==false)
-                                            @foreach ($clientes as $cliente)
-                                                @if ($cliente->id == $ticket->denunciante_id)
-                                                    <th scope="col-1">{{$cliente->name_denunciante}} {{$cliente->apellido_denunciante}}</th>
-                                                @endif
-                                            @endforeach
-                                        @else
-                                            <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                        @endif
-                                        @foreach ($denunciados as $denunciado)
-                                            @if ($denunciado->id == $ticket->denunciado_id)
-                                                <th scope="col-1">{{$denunciado->razon_social}}</th>
-                                                <th scope="col-1">{{$denunciado->objeto_denunciado}}</th>
-                                            @endif
-                                        @endforeach
-                                        <th scope="col-4">{{$ticket->asunto}}</th>
-                                        <th scope="col-1" class="bg-danger  p-2 text-dark bg-opacity-50">{{$ticket->estado}}</th>
-                                        <th scope="col-2">
-                                            <a href="{{ route('editTicket', ['id'=>$ticket->id]) }}" class="btn btn-success">
-                                                <span class="icon-pencil2"></span> Editar
-                                            </a>
-                                        </th>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        @endforeach
+                                    <td>{{$ticket->lastmodif_datetime}}</td>
+                                    <td><a href="{{ route('editTicket', ['id'=>$ticket->id])}}">Ver más...</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                         <tfoot class="col-12">
-                            <th colspan="7" class="m-auto text-center justify-content-center">
+                            <th colspan="9" class="m-auto text-center justify-content-center">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
                                         @if ($tickets->onFirstPage())
@@ -203,99 +108,28 @@
                             </th>
                         </tfoot>
                     @else
-                        {{-- 
-                            SI EL TICKET ES SOLO UN OBJETO Y NO UN ARREGLO SE MUESTRA EL TICKET EN LA PANTALLA SIN PAGINACION
-                            --}}
-                        @if(($tickets instanceof(\App\Models\Reclamo::class)) && $tickets->count() >= 1)
-                            <tbody class="col-12">
-                                @if($tickets->estado == 'Abierto')
-                                    @if($tickets->prioridad == 'Alto' || $tickets->prioridad == 'Muy Alto')
-                                        <tr class="bg-success p-2 text-dark bg-opacity-25">
-                                            <th scope="col-1">{{$tickets->id}}</th>
-                                            {{-- check if the $clientes var is an object of denunciantes --}}
-                                            @if ($clientes->id == $tickets->denunciante_id)
-                                                <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                            @endif
-                                            <th scope="col-1">{{$denunciados->razon_social}}</th>
-                                            <th scope="col-1">{{$denunciados->objeto_denunciado}}</th>
-                                            <th scope="col-4">{{$tickets->asunto}}</th>
-                                            <th scope="col-1" class="bg-success p-2 text-dark bg-opacity-50">{{$tickets->estado}}</th>
-                                            <th scope="col-2">
-                                                <a href="{{ route('editTicket', ['id'=>$tickets->id]) }}" class="btn btn-success">
-                                                    <span class="icon-pencil2"></span> Editar
-                                                </a>
-                                            </th>
-                                        </tr>
-                                    @else
-                                        @if($tickets->prioridad == 'Medio')
-                                            <tr class="bg-warning p-2 text-dark bg-opacity-25">
-                                                <th scope="col-1">{{$tickets->id}}</th>
-                                                {{-- check if the $clientes var is an object of denunciantes --}}
-                                                @if ($clientes->id == $tickets->denunciante_id)
-                                                <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                                @endif
-                                                <th scope="col-1">{{$denunciados->razon_social}}</th>
-                                                <th scope="col-1">{{$denunciados->objeto_denunciado}}</th>
-                                                <th scope="col-4">{{$tickets->asunto}}</th>
-                                                <th scope="col-1" class="bg-success p-2 text-dark bg-opacity-50">{{$tickets->estado}}</th>
-                                                <th scope="col-2">
-                                                    <a href="{{ route('editTicket', ['id'=>$tickets->id]) }}" class="btn btn-success">
-                                                        <span class="icon-pencil2"></span> Editar
-                                                    </a>
-                                                </th>
-                                            </tr>
-                                        @else
-                                            @if($tickets->prioridad == 'Bajo' || $tickets->prioridad =='Muy bajo')
-                                                <tr class="bg-secondary p-2 text-dark bg-opacity-25">
-                                                    <th scope="col-1">{{$tickets->id}}</th>
-                                                    {{-- check if the $clientes var is an object of denunciantes --}}
-                                                    @if ($clientes->id == $tickets->denunciante_id)
-                                                        <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                                    @endif
-                                                    <th scope="col-1">{{$denunciados->razon_social}}</th>
-                                                    <th scope="col-1">{{$denunciados->objeto_denunciado}}</th>
-                                                    <th scope="col-4">{{$tickets->asunto}}</th>
-                                                    <th scope="col-1" class="bg-success p-2 text-dark bg-opacity-50">{{$tickets->estado}}</th>
-                                                    <th scope="col-2">
-                                                        <a href="{{ route('editTicket', ['id'=>$tickets->id]) }}" class="btn btn-success">
-                                                            <span class="icon-pencil2"></span> Editar
-                                                        </a>
-                                                    </th>
-                                                </tr>
-                                            @endif
-                                        @endif
-                                    @endif
+                        <tbody class="col-12">
+                            <tr>
+                                <td>{{$tickets->id}}</td>
+                                @php
+                                    $target = App\Models\Denunciado::where('id',$tickets->target_id)->first();
+                                    $caller = App\Models\Callers::where('id',$tickets->caller_id)->first();
+                                @endphp
+                                <td>{{$caller->name}}</td>
+                                <td>{{$target->razonSocial}}</td>
+                                <td>{{$target->objectService}}</td>
+                                <td>{{$tickets->subject}}</td>
+                                @if($tickets->status == 'Cerrado')
+                                    <td class="bg-danger p-2 text-dark bg-opacity-50">{{$tickets->status}}</td>
                                 @else
-                                    <tr>
-                                        <th scope="col-1">{{$tickets->id}}</th>
-                                        {{-- check if the $clientes var is an object of denunciantes --}}
-                                        @if ($clientes->id == $tickets->denunciante_id)
-                                        <th scope="col-1">{{$clientes->name_denunciante}} {{$clientes->apellido_denunciante}}</th>
-                                        @endif
-                                        <th scope="col-1">{{$denunciados->razon_social}}</th>
-                                        <th scope="col-1">{{$denunciados->objeto_denunciado}}</th>
-                                        <th scope="col-4">{{$tickets->asunto}}</th>
-                                        <th scope="col-1" class="bg-danger p-2 text-dark bg-opacity-50">{{$tickets->estado}}</th>
-                                        <th scope="col-2">
-                                            <a href="{{ route('editTicket', ['id'=>$tickets->id]) }}" class="btn btn-success">
-                                                <span class="icon-pencil2"></span> Editar
-                                            </a>
-                                        </th>
-                                    </tr>
+                                    <td class="bg-success p-2 text-dark bg-opacity-50">{{$tickets->status}}</td>
                                 @endif
-                            </tbody>
-                        @endif
-                        @if($tickets == null || $tickets->count() == 0)
-                            <tbody class="col-12">
-                                <tr>
-                                    <th scope="col-1">No hay reclamos</th>
-                                </tr>
-                            </tbody>
-                        @endif
+                                <td>{{$tickets->lastmodif_datetime}}</td>
+                                <td><a href="{{ route('editTicket', ['id'=>$tickets->id])}}">Ver más...</a></td>
+                            </tr>
+                        </tbody>
                     @endif
                 </table>
-
-                    
             </div>
         </div>
     </div>

@@ -13,40 +13,7 @@ class CreateReclamos extends Migration
      */
     public function up()
     {
-        Schema::create('tickets', function(Blueprint $table) {
-            $table->id();
-
-            $table->string('subject');
-            $table->string('status')->default('Abierto');
-            $table->string('priority');
-            $table->string('sector');
-            $table->string('comprobante');
-
-            $table->timestamp('creation_datetime')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('lastmodif_datetime')->default(DB::raw('CURRENT_TIMESTAMP'));
-
-            $table->unsignedBigInteger('creator_id')->unsigned();
-            $table->foreign('creator_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            $table->unsignedBigInteger('modifier_id')->unsigned();
-            $table->foreign('modifier_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            $table->unsignedBigInteger('caller_id')->unsigned();
-            $table->foreign('caller_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            $table->unsignedBigInteger('target_id')->unsigned();
-            $table->foreign('target_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-        });
-
+        
         Schema::create('callers', function (Blueprint $table) {
             $table->id();
      
@@ -70,6 +37,41 @@ class CreateReclamos extends Migration
             $table->string('province');
         
             $table->timestamps();
+        });
+
+        Schema::create('tickets', function(Blueprint $table) {
+            $table->id();
+
+            $table->string('subject');
+            $table->string('status')->default('Abierto');
+            $table->string('priority');
+            $table->string('sector');
+            $table->string('comprobante');
+
+            
+            $table->unsignedBigInteger('creator_id')->unsigned();
+            $table->foreign('creator_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('modifier_id')->unsigned();
+            $table->foreign('modifier_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->unsignedBigInteger('caller_id')->unsigned();
+            $table->foreign('caller_id')
+                ->references('id')
+                ->on('callers')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('target_id')->unsigned();
+            $table->foreign('target_id')
+                ->references('id')
+                ->on('denunciados')
+                ->onDelete('cascade');
+            $table->timestamp('creation_datetime')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('lastmodif_datetime')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
         Schema::create('reclamos', function (Blueprint $table) {

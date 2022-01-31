@@ -35,18 +35,11 @@
                                 </li>
                             </ul>
                         @else
-                            {{-- @if (route('register') == url()->current())
-                                <ul class="navbar-nav nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="{{ route('login') }}">Inicio</a>
-                                    </li>
-                                </ul>
-                            @else --}}
                             @if(auth() -> user() -> role == 'user')
                                 @if(auth()->check())
                                     <ul class="navbar-nav nav">
                                         <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="{{ route('user') }}">Inicio</a>
+                                            <a class="nav-link active" href="{{ route('user') }}">Inicio</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{route('tickets')}}">Tickets</a>
@@ -54,15 +47,8 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{route('clientes')}}">Clientes</a>
                                         </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                Menú
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                                <li><a class="dropdown-item" href="{{route('logout')}}">Cerrar Sesión</a></li>
-                                                <li><a class="dropdown-item" href="#">Clientes</a></li>
-                                            </ul>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{route('logout')}}">Cerrar Sesión</a>
                                         </li>
                                     </ul>
                                 @endif

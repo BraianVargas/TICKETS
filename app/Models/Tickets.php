@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tickets extends Model
 {
+    public $timestamps = false;
+
     use HasFactory;
     protected $fillable = [
         'subject',
@@ -14,11 +16,11 @@ class Tickets extends Model
         'priority',
         'sector',
         'comprobante',
-        'creation_datetime',
-        'lastmodif_datetime',
         'creator_id',
         'modifier_id',
         'caller_id',
         'target_id',
+        'creation_datetime',
+        'lastmodif_datetime',
     ];
 }

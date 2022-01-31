@@ -5,97 +5,107 @@
     <div class="container-fluid mt-4">
         <div class="col-12 bg-white rounded-3 shadow">
             <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
-                <div class="panel-heading mt-3 mb-3 ">
-                    <h2 class="text-center">Editar Reclamo</h2>
+                @error('success')
+                <div class="alert alert-danger mt-3" role="alert">
+                    <strong>{{ $message }}</strong> 
                 </div>
-                <form action="{{route('editTicket', ['id'=>$tickets->id])}}" method="post" class="row">
-                    @error('success')
-                    <div class="alert alert-danger mt-3" role="alert">
-                        <strong>{{ $message }}</strong> 
-                    </div>
-                    @enderror
+                @enderror
+                <div class="panel-heading mt-3 mb-3 ">
+                    <h2 class="text-center">Detalles</h2>
+                    <h2 class="text-center">Ticket #{{$tickets->id}}</h2>
+                    @if ($tickets->status == 'Cerrado')
+                        <h2 class="text-center rounded-pill bg-danger p-2 text-dark bg-opacity-50">Estado: {{$tickets->status}}</h2>
+                    @else
+                        <h2 class="text-center rounded-pill bg-success p-2 text-dark bg-opacity-50">Estado: {{$tickets->status}}</h2>
+                    @endif
+                </div>
+                <form action="{{route('editTicket', ['id'=>$tickets->id])}}" method="POST" class="row">
                     @csrf
-                    @if($tickets->estado == 'Abierto')
-                        <div class="bg-primary p-2 text-dark bg-opacity-50 rounded-pill m-auto w-50 border border-3 border-primary mb-3">
-                            <label id="idTicket" class="text-center fw-bolder fs-3" for="">N° {{ $tickets->id }}</label>
-                        </div>
+                    @php
+                        $reclamos = App\Models\Reclamo::where('ticket_id',$tickets->id)->get();
+                    @endphp
+                    <table class="table table-bordered rounded-3 mt-3">
+                        <thead class="">
+                            <th>#</th>
+                            <th>Detalle</th>
+                            <th>Fecha</th>
+                        </thead>
+                        <tbody>
+                            @foreach($reclamos as $reclamo)
+                                <tr>
+                                    <td> {{$reclamo->id}} </td>
+                                    <td> {{$reclamo->detail}} </td>
+                                    <td> {{$reclamo->creation_datetime}} </td>
+                                </tr>
+                            @endforeach
 
-                        <div class="bg-warning p-2 text-dark bg-opacity-50 rounded-pill border border-3 border-warning mb-3 col-12">
-                            <label for="" class="fs-3 text-uppercase fw-bolder text-decoration-underline">Asunto:</label>
-                            <label class="fs-4">{{ $tickets->asunto }}</label>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <label class="fs-4 fw-bolder" for="prioridad">Prioridad</label>
-                            <select class="rounded-3 form-control" name="prioridad" id="prioridad">
-                                <option  {{ $tickets->prioridad ==  'Muy bajo' ? 'selected' : '' }} value="Muy bajo">1 - Muy bajo</option>
-                                <option  {{ $tickets->prioridad ==  'Bajo' ? 'selected' : '' }} value="Bajo">2 - Bajo</option>
-                                <option  {{ $tickets->prioridad ==  'Medio' ? 'selected' : '' }} value="Normal">3 - Normal</option>
-                                <option  {{ $tickets->prioridad ==  'Alto' ? 'selected' : '' }} value="Alto">4 - Alto</option>
-                                <option  {{ $tickets->prioridad ==  'Muy alto' ? 'selected' : '' }} value="Muy Alto">5 - Muy Alto</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 col-12 col-md-6">
-                            <label for="" class="fs-4 fw-bolder">Sector</label>
-                            <select class="rounded form-control" name="sector" id="sector" required>
-                                <option value="" >Seleccionar...</option>
-                                <option {{ $tickets->sector ==  'Defensa al Consumdor' ? 'selected' : '' }} value="Defensa al Consumdor">Defensa al consumidor</option>
-                                <option {{ $tickets->sector ==  'Dirección de Tecnología' ? 'selected' : '' }} value="Dirección de Tecnología">Dirección de Tecnología</option>
-                                <option {{ $tickets->sector ==  'Secretaría de cultura y deporte' ? 'selected' : '' }} value="Secretaría de cultura y deporte">Secretaría de cultura y deporte</option>
-                                <option {{ $tickets->sector ==  'Secretaría de hacienda y finanzas' ? 'selected' : '' }} value="Secretaría de hacienda y finanzas">Secretaría de hacienda y finanzas</option>
-                                <option {{ $tickets->sector ==  'Secretaría de inclusión social' ? 'selected' : '' }} value="Secretaría de inclusión social">Secretaría de inclusión social</option>
-                                <option {{ $tickets->sector ==  'Secretaría de infraestructura' ? 'selected' : '' }} value="Secretaría de infraestructura">Secretaría de infraestructura</option>
-                                <option {{ $tickets->sector ==  'Secretaría de planificación y gestión' ? 'selected' : '' }} value="Secretaría de planificación y gestión">Secretaría de planificación y gestión</option>
-                                <option {{ $tickets->sector ==  'Secretaría de salud' ? 'selected' : '' }} value="Secretaría de salud">Secretaría de salud</option>
-                                <option {{ $tickets->sector ==  'Dirección de turismo' ? 'selected' : '' }} value="Dirección de turismo">Dirección de turismo</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 col-12 col-md-6">
-                            <label for="" class="fs-4 fw-bolder">Comprobante</label>
-                            <select name="comprobante_reclamo" id="comprobante_reclamo" class="form-control">
-                                <option value="si">Sí</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 col-12 col-md-6">
-                            <label for="estado" class="fs-4 fw-bolder">Estado</label>
-                            <select name="estado" id="estado" class="form-control">
-                                <option value="Abierto">Abierto</option>
-                                <option value="Cerrado">Cerrado</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 text-center col-12 form-group">
-                            <label for="motivo" class="fs-4 fw-bolder">Motivo</label><br>
-                            <textarea class="form-control col-12 py-3 hy-2" name="motivo" id="motivo" cols="30" rows="10" value="{{ $tickets->motivo }}" placeholder="{{ $tickets->motivo }}">
-                                {{ $tickets->motivo }}
-                            </textarea>
-                        </div>
-
-                        <div class="text-center col-12">
-                            <button type="submit" class="btn btn-primary col-12 rounded-pill">Guardar</button>
+                        </tbody>
+                    </table>
+                    @if($tickets->status == 'Abierto')
+                        <div class="row text-center">
+                            <h2 class="text-center">Agregar Detalle</h2>
+                            <div class="col-12 m-auto form-floating">
+                                <textarea name="detail" id="detail" class="form-control px-2" placeholder=" " required>{{$tickets->detail}}</textarea>
+                                <label for="detail">&nbsp;&nbsp;&nbsp;Detalle</label>
+                            </div>
                         </div>
                     @else
-                        <div class="bg-primary p-2 text-dark bg-opacity-50 rounded-pill m-auto w-50 border border-3 border-primary mb-3">
-                            <label class="text-center fw-bolder fs-3" for="">N° {{ $tickets->id }}</label>
+                        <div class="row text-center">
+                            <h2 class="text-center">Agregar Detalle</h2>
+                            <div class="col-12 m-auto form-floating">
+                                <textarea name="detail" id="detail" class="form-control px-2" placeholder=" " style="height: 150px" required disabled>{{$tickets->detail}}</textarea>
+                                <label for="detail">&nbsp;&nbsp;&nbsp;Detalle</label>
+                            </div>
                         </div>
-
-                        <div class="bg-danger p-2 text-dark bg-opacity-50 rounded-pill border border-3 border-danger mb-3 col-12">
-                            <label for="" class="fs-3 text-uppercase fw-bolder text-decoration-underline">Estado:</label>
-                            <label class="fs-4">{{ $tickets->estado }}</label>
+                    @endif
+                    <div class="row text-center mt-3">
+                        <div class="col-12 m-auto form-floating">
+                            @if($tickets->status == 'Abierto')
+                                <button type="button" class="btn btn-danger col-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modal">
+                                    Cerrar Ticket
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-danger col-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modal" disabled>
+                                    Cerrar Ticket
+                                </button>
+                            @endif
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Confirmación</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4> Con esta acción cambiará el estado del ticket a "Cerrado" y no podrá ser modificable. </h4>
+                                        <br>
+                                        <h2>
+                                            ¿Desea continuar?
+                                        </h2>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button action="{{route('closeTicket', ['id'=>$tickets->id])}}" class="btn btn-success">Confirmar</a>
+                                    
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="mb-3 col-12">
-                            <label for="" class="fs-3 text-uppercase fw-bolder text-decoration-underline">Asunto:</label>
-                            <label class="fs-4">{{ $tickets->asunto }}</label>
-                        </div>
-
-
-                        {{-- message text of ticket cerrado col-12 --}}
-                        <div class="alert alert-info mt-3 col-12" role="alert">
-                            <strong>El ticket está cerrado y ya no es modificable.</strong> 
+                    </div>
+                    @if($tickets->status == 'Abierto')
+                        <div class="row text-center mt-3">
+                            <div class="col-12 m-auto form-floating">
+                                <button type="submit" class="btn btn-primary col-12 rounded-pill">Guardar</button>
+                            </div>
+                        </div>    
+                    @else
+                        <div class="row text-center mt-3">
+                            <div class="col-12 m-auto form-floating">
+                                <button type="submit" class="btn btn-primary col-12 rounded-pill" disabled>Guardar</button>
+                            </div>
                         </div>
                     @endif
                 </form>
