@@ -45,7 +45,7 @@
                                             <a class="nav-link" href="{{route('tickets')}}">Tickets</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{route('clientes')}}">Clientes</a>
+                                            <a class="nav-link" href="{{route('client.index')}}">Clientes</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{route('logout')}}">Cerrar Sesión</a>

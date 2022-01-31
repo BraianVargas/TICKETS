@@ -126,3 +126,18 @@ Route::get('/editTicket/close/{id}', [TicketController::class, 'closeTicket'])
 Route::post('/editTicket/{id}', [TicketController::class, 'closeTicket'])
     ->middleware('auth.user')
     ->name('closeTicket');
+
+
+
+
+
+
+//  **** ROUTES FOR CLIENTS ****
+
+Route::get('/client', [CallersController::class, 'index'])
+    ->middleware('auth.user')
+    ->name('client.index');
+
+Route::get('/client/create', [CallersController::class, 'create'])
+    ->middleware('auth.user')
+    ->name('client.create');

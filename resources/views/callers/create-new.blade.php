@@ -8,7 +8,7 @@
     <form class="col-12"  role="form" method="POST" action="{{ url('/create-client') }}">
         {{ csrf_field() }}
         
-        @if(session()->has('success'))
+        @if(session()->has('errors'))
             <div class="alert alert-success">
                 {{ session()->get('success') }}
             </div>

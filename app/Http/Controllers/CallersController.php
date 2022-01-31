@@ -9,7 +9,7 @@ class CallersController extends Controller
 {
     public function index()
     {
-        return ('hola');
+        return view('callers.index');
     }
 
     public function create()
@@ -19,10 +19,11 @@ class CallersController extends Controller
 
     public function create_new()
     {
+        // CREATION SECTION
         $client = Callers::where('dni', request('dni_denunciante'))->first();
         if($client != null)
         {
-            return redirect()->route('create-ticket', compact('client'))->with('message', 'El cliente ya existe, realice una nueva busqueda');
+            return back()->with('message', 'El cliente ya existe, realice una nueva busqueda');
         }
         else
         {
@@ -39,6 +40,11 @@ class CallersController extends Controller
             $denunciante->save();
             return redirect()->route('create-ticket', compact('client'))->with('success', 'Denunciante creado correctamente');
         }
+        // SEARCHES SECTION
         
+
+        //VIEWS SECTION
+
+
     }
 }
