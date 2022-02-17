@@ -14,9 +14,10 @@ class TicketController extends Controller
     public function index(){
         return view('ticket.index');
     }
-    public function create()
-    {   
-        return view('ticket.create');
+    public function create(Request $request){
+        $id = $request->id;
+        $client = Callers::where('id', $id)->first();
+        return view('ticket.create', compact('client', 'id'));
     }
 
     public function store(request $request)
@@ -115,8 +116,8 @@ class TicketController extends Controller
             $reclamo->save();
             $denunciado->save();
         }
-        
-        return redirect('/create_ticket');
+
+        return back()->with('modal', nl2br("El ticket fué creado correctamente. Nro de ticket: $tickets->id "));
     }
 
     public function showWithDni($dni){
@@ -133,10 +134,16 @@ class TicketController extends Controller
     {
         $clientes = Callers::all();
         $denunciados = Denunciado::all();
-        $tickets = Tickets::orderBy('id', 'asc')->paginate(10);
-        
-        return response()
-            -> view('search.verTickets', compact('tickets','clientes','denunciados'));
+        $tickets = Tickets::get()->all();
+        if($tickets == null or $tickets == ''){
+            $tickets = null;
+            $clientes = null;
+            $denunciados=null;
+            return response()-> view('search.verTickets', compact('tickets','clientes','denunciados'));
+        }else{
+            $tickets = Tickets::orderBy('id', 'asc')->paginate(10);
+            return response()-> view('search.verTickets', compact('tickets','clientes','denunciados'));
+        }
     }
 
     //  ****************************************** BUSCA CLIENTES (USUARIOS) POR DNI **************************************************
@@ -149,18 +156,24 @@ class TicketController extends Controller
     {
         $client = Callers::where('dni', request('dni'))->first();
         if($client!=null){
-            $tickets = Tickets::where('caller_id', $client->id)->paginate(10);
+            $tickets = Tickets::where('caller_id', $client->id)->get();
+            $tickets = Tickets::orderBy('id', 'desC')->paginate(10);
             
             if($tickets){
-                return view('ticket.new-ticket', compact('tickets','client'));
+                return redirect(route('newTicket', ['id'=>$client->id],compact('tickets','client')));
+                // return view('ticket.new-ticket', compact('tickets','client'));
             }else{
                 return back()->withErrors(['message' => 'No se encontraron tickets']);
             }
         }else{
             return back()->withErrors(['message' => 'No se encontró el cliente']);
         }
-
-
+    }
+    public function newTicket($id){
+        $client = Callers::where('id', $id)->first();
+        $tickets = Tickets::where('caller_id', $client->id)->get();
+        $tickets = Tickets::orderBy('id', 'desC')->paginate(10);
+        return view('ticket.new-ticket', ['id'=>$id], compact('tickets','client'));
     }
 
     // ***************************************** CONTROLA BUSQUEDAS BY DNI DE CLIENTE ************************************************
@@ -171,7 +184,20 @@ class TicketController extends Controller
 
     public function postSearchTicketByDni()
     {
-        return redirect()->route('create-ticket', ['dni' => $caller->dni]);
+        $client = Callers::where('dni', request('dni'))->first();
+        $tickets = Tickets::where('caller_id', $client->id)->first();
+        if($tickets == null or $tickets == ''){
+            $tickets = null;
+            $clientes = null;
+            $denunciados=null;
+            return back()->withErrors(['message' => 'Reclamo no encontrado']);
+        }else{
+            $tickets = Tickets::where('caller_id', $client->id);
+            $tickets = Tickets::orderBy('id', 'desc')->paginate(10);
+            return redirect(route('newTicket', ['id'=>$client->id],compact('tickets','client')));
+
+        }
+        
     }
     
     // ***************************************** CONTROLA BUSQUEDAS BY ID DE RECLAMO ************************************************
@@ -183,7 +209,8 @@ class TicketController extends Controller
     public function postSearchTicketById()
     {
         $tickets = Tickets::where('id', request('id'))->first();
-        if($tickets){
+        
+        if($tickets != null){
             return view('search.verTickets', compact('tickets'));
         }else{
             return back()->withErrors(['message' => 'Reclamo no encontrado']);
@@ -201,8 +228,8 @@ class TicketController extends Controller
         $tickets = Tickets::where('id', $id)->first();
         $tickets->lastmodif_datetime = date('Y-m-d H:i:s');
         $tickets->modifier_id = Auth::id();
-        // $tickets->status = request('status');
-        $tickets->update();
+        $tickets->status = request('status');
+        
         $reclamos = Reclamo::create(
             [
                 'detail' => request('detail'),
@@ -212,27 +239,10 @@ class TicketController extends Controller
                 'lastmodif_datetime' => date('Y-m-d H:i:s'),
             ]
         );
-        return back()->withErrors('success', 'Ticket editado correctamente');
+        $tickets->update();
+        return back()->withErrors('message', 'Ticket editado correctamente');
     }
 
-    public function closeTicket($id)
-    {
-        $tickets = Tickets::where('id', $id)->first();
-        $tickets->lastmodif_datetime = date('Y-m-d H:i:s');
-        $tickets->modifier_id = Auth::id();
-        $tickets->status = 'Cerrado';
-        $reclamos = Reclamo::create(
-            [
-                'detail' => request('detail'),
-                'ticket_id' => $id,
-                'user_id' => Auth::user()->id,
-                'creation_datetime' => date('Y-m-d H:i:s'),
-                'lastmodif_datetime' => date('Y-m-d H:i:s'),
-            ]
-        );
-        $tickets->update();
-        return back()->withErrors('success', 'Ticket editado correctamente');
-    }
 }
 
 

@@ -23,7 +23,7 @@ class CallersController extends Controller
         $client = Callers::where('dni', request('dni_denunciante'))->first();
         if($client != null)
         {
-            return back()->with('message', 'El cliente ya existe, realice una nueva busqueda');
+            return back()->with('error', 'El cliente ya existe');
         }
         else
         {
@@ -38,13 +38,60 @@ class CallersController extends Controller
                 ]
             );
             $denunciante->save();
-            return redirect()->route('create-ticket', compact('client'))->with('success', 'Denunciante creado correctamente');
+            return back()->with('success', 'Cliente creado correctamente');
         }
-        // SEARCHES SECTION
-        
-
-        //VIEWS SECTION
-
-
     }
+    public function show()
+    {
+        return view('callers.show');
+    }
+
+    public function searchCallerByDni(){
+        return view('callers.searchByDni');
+    }
+    public function postSearchByDni(){
+        $callers = Callers::where('dni', request('dni'))->first();
+        if ($callers == null)
+        {
+            return back()->with('error', 'El cliente no existe');
+        }
+        else
+        {
+            return view('callers.showCaller', compact('callers'));
+        }
+    }
+
+    public function searchCallerById(){
+        return view('callers.searchById');
+    }
+    public function postSearchCallerById(){
+        $callers = Callers::where('id', request('idCaller'))->first();
+        if ($callers == null)
+        {
+            return back()->with('error', 'Cliente no encontrado');
+        }
+        else
+        {
+            return view('callers.showCaller', compact('callers'));
+        }
+    }
+
+
+    public function edit($id){
+        $callers = Callers::where('id', $id)->first();
+        return view('callers.editUser', compact('callers'));
+    }
+    public function postEdit($id){
+        $callers = Callers::where('id', $id)->first();
+
+        $callers->name = request('name');
+        $callers->lastname = request('lastname');
+        $callers->dni = request('dni');
+        $callers->mail = request('mail');
+        $callers->phone = request('phone');
+        $callers->location = request('location');
+        $callers->update();
+        return back()->with('success', 'Cliente editado correctamente');
+    }
+
 }

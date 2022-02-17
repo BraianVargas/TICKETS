@@ -34,9 +34,16 @@
                                     <a class="nav-link active" aria-current="page" href="{{ route('login') }}">Inicio</a>
                                 </li>
                             </ul>
+                        @elseif (route('register') == url()->current())
+                            <ul class="navbar-nav nav">
+                                <li class="nav-item">
+                                    <a class="nav
+                                    -link active" aria-current="page" href="{{ route('login') }}">Inicio</a>
+                                </li>
+                            </ul>
                         @else
-                            @if(auth() -> user() -> role == 'user')
-                                @if(auth()->check())
+                            @if(auth()->check())
+                                @if (auth()->user()->role == 'user')
                                     <ul class="navbar-nav nav">
                                         <li class="nav-item">
                                             <a class="nav-link active" href="{{ route('user') }}">Inicio</a>
@@ -51,6 +58,29 @@
                                             <a class="nav-link" href="{{route('logout')}}">Cerrar Sesión</a>
                                         </li>
                                     </ul>
+                                @else
+                                    @if(auth()->user()->role == 'admin')
+                                        <ul class="navbar-nav nav">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" href="{{ route('admin') }}">Inicio</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{route('tickets')}}">Tickets</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{route('client.index')}}">Clientes</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{route('client.index')}}">Reportes</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{route('logout')}}">Cerrar Sesión</a>
+                                            </li>
+                                        </ul>
+                                    @else
+                                        
+                                    @endif
+                                    
                                 @endif
                             @endif
                         @endif

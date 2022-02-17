@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="p-2 m-2 bg-white shadow rounded-3 col-12 col-md-9 justify-content-left">
-        <a class="text-decoration-none text-black m-2" href="{{route('viewTicket')}}">
+        <a class="text-decoration-none text-black m-2" href="{{route('callers.show')}}">
             Ver Clientes
         </a>
     </div>
@@ -19,12 +19,12 @@
         <p class="text-decoration-none text-black m-2">Buscar Clientes</p>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                <a class="text-decoration-none text-black m-2" href="{{route('searchTicketByDni')}}">
+                <a class="text-decoration-none text-black m-2" href="{{route('callers.searchByDni')}}">
                     Por DNI
                 </a>
             </li>
             <li class="list-group-item">
-                <a class="text-decoration-none text-black m-2" href="{{route('searchTicketById')}}">
+                <a class="text-decoration-none text-black m-2" href="{{route('callers.searchById')}}">
                     Por ID de cliente
                 </a>
             </li>

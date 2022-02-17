@@ -7,13 +7,13 @@
 <div class="container">
     <link rel="stylesheet" href="https://i.icomoon.io/public/temp/dbcba7dd7e/UntitledProject/style.css">
     <div class="row">
-        <div class="col-12">
-            <div class="panel panel-default">
+        <div class="col-12 bg-white mt-4 p-3 rounded-3">
+            
+            <div class="panel panel-default mt-3 p-2">
                 <div class="panel-heading">
-                    <h4>
+                    <h2 class="text-center">
                         Ver Ticket
-                        <i class="fa fa-ticket" aria-hidden="true"></i>
-                    </h4>
+                    </h2>
                 </div>
                 <br>
                 <table class="table table-bordered container-fluid m-auto">
@@ -52,10 +52,11 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot class="col-12">
+                        
+                        <tfoot class="col-12 m-auto justify-content-center text-center">
                             <th colspan="9" class="m-auto text-center justify-content-center">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
+                                <nav class="d-flex m-auto ">
+                                    <ul class="pagination m-auto">
                                         @if ($tickets->onFirstPage())
                                             <li class="page-item disabled">
                                                 <a class="page-link" href="{{ $tickets->url(1) }}" aria-label="Previous">
@@ -67,6 +68,7 @@
                                                     <span class="sr-only">Anterior</span>
                                                 </a>
                                             </li>
+                                            <li class="page-item disabled"><a class="page-link" href="{{$tickets->url(1)}}">1</a></li>
                                         @else
                                             <li class="page-item">
                                                 <a class="page-link" href="{{ $tickets->url(1) }}" aria-label="Previous">
@@ -76,15 +78,17 @@
                                             <li class="page-item">
                                                 <a class="page-link" href="{{$tickets->previousPageUrl()}}">Anterior</a>
                                             </li>
+                                            <li class="page-item"><a class="page-link" href="{{$tickets->url(1)}}">1</a></li>
                                         @endif
-                                        @for($i=0; $i<$tickets->lastPage(); $i++)
-                                            @if ($tickets->currentPage() == $i+1)
-                                                <li class="page-item active"><a class="page-link" href="{{$tickets->url($i+1)}}">{{$i+1}}</a></li>
-                                            @else
-                                                <li class="page-item"><a class="page-link" href="{{$tickets->url($i+1)}}">{{$i+1}}</a></li>
-                                            @endif
-                                        @endfor
+                                        
+                                        <li class="page-item disabled"><a class="page-link" href="">&nbsp;</a></li>
+                                        <li class="page-item disabled"><a class="page-link" href="">. . .</a></li>
+                                        <li class="page-item disabled"><a class="page-link" href="">{{$tickets->currentPage()}}</a></li>
+                                        <li class="page-item disabled"><a class="page-link" href="">. . .</a></li>
+                                        <li class="page-item disabled"><a class="page-link" href="">&nbsp;</a></li>
+
                                         @if($tickets->hasMorePages())
+                                            <li class="page-item"><a class="page-link" href="{{$tickets->url($tickets->lastPage())}}">{{$tickets->lastPage()}}</a></li>
                                             <li class="page-item">
                                                 <a class="page-link" href="{{$tickets->nextPageUrl()}}">Siguiente</a>
                                             </li>
@@ -94,6 +98,7 @@
                                                 </a>
                                             </li>
                                         @else
+                                            <li class="page-item disabled"><a class="page-link" href="{{$tickets->url($tickets->lastPage())}}">{{$tickets->lastPage()}}</a></li>
                                             <li class="page-item disabled">
                                                 <a class="page-link" href="{{$tickets->nextPageUrl()}}">Siguiente</a>
                                             </li>
@@ -107,7 +112,7 @@
                                 </nav>
                             </th>
                         </tfoot>
-                    @else
+                    @elseif (($tickets != null) && (($tickets instanceof App\Models\Tickets) != false) )
                         <tbody class="col-12">
                             <tr>
                                 <td>{{$tickets->id}}</td>
@@ -128,8 +133,33 @@
                                 <td><a href="{{ route('editTicket', ['id'=>$tickets->id])}}">Ver más...</a></td>
                             </tr>
                         </tbody>
+                    @else
+                        <tbody class="col-12">
+                            <th>
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        <h3>No se encontraron tickets.</h3>
+                                        @php
+                                            $id= null;
+                                            $client = null;
+                                        @endphp
+
+                                        <a href="{{route('create-ticket', compact('client', 'id'))}}" class="btn btn-primary mt-3 col-12 rounded-pill">Crear nuevo ticket</a>
+                                    </td>
+                                </tr>
+                            </th>
+                        </tbody>
                     @endif
                 </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="m-auto">
+                @php
+                    $id=null;
+                    $client=null;
+                @endphp
+                <a href="{{route('searchUser')}}" class="btn btn-primary mt-3 col-12 rounded-pill">Crear nuevo ticket</a>
             </div>
         </div>
     </div>

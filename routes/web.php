@@ -41,103 +41,108 @@ Route::post('/logout', [SessionsController::class, 'destroy'])
 Route::get('/admin', [AdminController::class, 'index'])
     ->middleware('auth.admin')
     ->name('admin');
+Route::get('/admin/reports', [AdminController::class, 'reports'])
+    ->middleware('auth.admin')
+    ->name('admin.reports');
+// **** END ADMIN ROUTES **** 
 
 
+
+    
+Route::middleware(['auth'])->group(function (){
+Route::middleware(['auth.admin'])->group(function (){
 // **** USER ROUTES ****
 // INDEX
 Route::get('/user', [UserController::class, 'index'])
-    ->middleware('auth')
     ->name('user');
-
 
 // **** CREATE TICKET
 Route::get('/create_ticket', [TicketController::class, 'create'])
-    ->middleware('auth.user')
     ->name('create-ticket');
 Route::post('/create_ticket', [TicketController::class, 'store'])
-    ->middleware('auth.user')
     ->name('create-ticket');
+Route::get('/create_ticket/{id}', [TicketController::class, 'newTicket'])
+    ->name('newTicket');
 
 // ****  SEARCHES ROUTES ****
 Route::get('/searchUserByDni', [TicketController::class, 'searchUser'])
-    ->middleware('auth.user')
     ->name('searchUser');
 
 Route::post('/searchUserByDni', [TicketController::class, 'PostSearchUser'])
-    ->middleware('auth.user')
     ->name('searchUser');
     
 Route::get('/search-ticket/byDNI', [TicketController::class, 'searchTicketByDni'])
-    ->middleware('auth.user')
     ->name('searchTicketByDni');
 
 Route::post('/search-ticket/byDNI', [TicketController::class, 'postSearchTicketByDni'])
-    ->middleware('auth.user')
     ->name('searchTicketByDni');
 
+Route::get('/search-ticket/byId', [TicketController::class, 'searchTicketById'])
+    ->name('searchTicketById');
+
+Route::post('/search-ticket/byId', [TicketController::class, 'postSearchTicketById'])
+    ->name('searchTicketById');
 
 
-Route::get('/ver-tickets', [TicketController::class, 'show'])
-    ->middleware('auth.user')
-    ->name('viewTicket');
 
-Route::get('/ver-tickets/{dni}', [TicketController::class, 'showWithDni'])
-    ->middleware('auth.user')
-    ->name('viewTicketWithId');
 
-Route::get('/tickets', [TicketController::class, 'index'])
-    ->middleware('auth.user')
-    ->name('tickets');
+    Route::get('/ver-tickets', [TicketController::class, 'show'])
+        ->name('viewTicket');
+    Route::get('/ver-tickets/{dni}', [TicketController::class, 'showWithDni'])
+        ->name('viewTicketWithId');
+    Route::get('/tickets', [TicketController::class, 'index'])
+        ->name('tickets');
+
 
 
 // **** CALLERS ROUTES ****
 Route::get('/clientes', [CallersController::class, 'index'])
-    ->middleware('auth.user')
     ->name('clientes');
 
 Route::get('/create-client', [CallersController::class, 'create'])
-    ->middleware('auth.user')
     ->name('create_client');
 
 Route::post('/create-client', [CallersController::class, 'create_new'])
-    ->middleware('auth.user')
     ->name('create_client');
+Route::get('/showClients', [CallersController::class, 'show'])
+    ->name('callers.show');
 
-Route::get('/search-ticket/byId', [TicketController::class, 'searchTicketById'])
-    ->middleware('auth.user')
-    ->name('searchTicketById');
+Route::get('/searchByDni', [CallersController::class, 'searchCallerByDni'])
+    ->name('callers.searchByDni');
+Route::post('/searchByDni', [CallersController::class, 'postSearchByDni'])
+    ->name('callers.searchByDni');
 
-Route::post('/search-ticket/byId', [TicketController::class, 'postSearchTicketById'])
-    ->middleware('auth.user')
-    ->name('searchTicketById');
+Route::get('/searchById', [CallersController::class, 'searchCallerById'])
+    ->name('callers.searchById');
+Route::post('/searchById', [CallersController::class, 'postSearchCallerById'])
+    ->name('callers.searchById');
+
+Route::get('/edit/{id}', [CallersController::class, 'edit'])
+    ->name('callers.editUser');
+Route::post('/edit/{id}', [CallersController::class, 'postEdit'])
+    ->name('callers.editUser');
+
+
+
+
+
+
 
 Route::get('/editTicket/{id}', [TicketController::class, 'editTicket'])
-    ->middleware('auth.user')
     ->name('editTicket');
 
 Route::post('/editTicket/{id}', [TicketController::class, 'postEditTicket'])
-    ->middleware('auth.user')
     ->name('editTicket');
-
-Route::get('/editTicket/close/{id}', [TicketController::class, 'closeTicket'])
-    ->middleware('auth.user')
-    ->name('closeTicket');
-
-Route::post('/editTicket/{id}', [TicketController::class, 'closeTicket'])
-    ->middleware('auth.user')
-    ->name('closeTicket');
-
-
-
-
-
-
+    
 //  **** ROUTES FOR CLIENTS ****
 
 Route::get('/client', [CallersController::class, 'index'])
-    ->middleware('auth.user')
     ->name('client.index');
 
 Route::get('/client/create', [CallersController::class, 'create'])
-    ->middleware('auth.user')
     ->name('client.create');
+
+
+
+});
+});

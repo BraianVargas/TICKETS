@@ -10,14 +10,14 @@
                     <strong>BUSCAR CLIENTE PREVIO A LA CARGA DEL RECLAMO</strong>
                 </div>
                 <div class="panel-heading mt-3">
-                    <h3 class="panel-title">Buscar Usuario</h3>
+                    <h3 class="panel-title">Buscar Cliente</h3>
                 </div>
                 <form method="POST" action="{{ url('/searchUserByDni') }}">
                     {{csrf_field()}}
                     <div class="row">
                         <div class="col-md-11 form-floating">
-                            <input id="dni" type="text" class="form-control {{ $errors->has('dni') ? ' is-invalid' : '' }}" name="dni" required autofocus>
-                            <label for="dni" class="">Buscar DNI</label>
+                            <input id="dni" type="text" class="form-control" name="dni" required autofocus placeholder=" ">
+                            <label for="dni" class="">&nbsp;&nbsp;&nbsp;Buscar DNI</label>
                             @if ($errors->has('dni'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('dni') }}</strong>

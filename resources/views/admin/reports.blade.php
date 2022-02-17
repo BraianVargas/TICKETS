@@ -6,7 +6,7 @@
 
 <div class="mt-4 col-12  justify-conten-center text-center">
     <h1 class="fw-bold text-uppercase">
-       Hola  {{ Auth::user()->name }}
+       Reportes
     </h1>
     <div class="container">
         <p class="fw-bold fs-5">
@@ -33,5 +33,4 @@
     </div>
     
 </div>
-
 @endsection

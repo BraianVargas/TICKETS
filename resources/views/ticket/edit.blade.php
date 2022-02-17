@@ -5,7 +5,7 @@
     <div class="container-fluid mt-4">
         <div class="col-12 bg-white rounded-3 shadow">
             <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
-                @error('success')
+                @error('message')
                 <div class="alert alert-danger mt-3" role="alert">
                     <strong>{{ $message }}</strong> 
                 </div>
@@ -19,7 +19,7 @@
                         <h2 class="text-center rounded-pill bg-success p-2 text-dark bg-opacity-50">Estado: {{$tickets->status}}</h2>
                     @endif
                 </div>
-                <form action="{{route('editTicket', ['id'=>$tickets->id])}}" method="POST" class="row">
+                <form method="POST" class="row">
                     @csrf
                     @php
                         $reclamos = App\Models\Reclamo::where('ticket_id',$tickets->id)->get();
@@ -45,68 +45,76 @@
                         <div class="row text-center">
                             <h2 class="text-center">Agregar Detalle</h2>
                             <div class="col-12 m-auto form-floating">
-                                <textarea name="detail" id="detail" class="form-control px-2" placeholder=" " required>{{$tickets->detail}}</textarea>
+                                <textarea name="detail" id="detail" class="form-control px-2" placeholder=" "  style="height: 150px" required>{{$tickets->detail}}</textarea>
                                 <label for="detail">&nbsp;&nbsp;&nbsp;Detalle</label>
                             </div>
                         </div>
                     @else
-                        <div class="row text-center">
-                            <h2 class="text-center">Agregar Detalle</h2>
-                            <div class="col-12 m-auto form-floating">
-                                <textarea name="detail" id="detail" class="form-control px-2" placeholder=" " style="height: 150px" required disabled>{{$tickets->detail}}</textarea>
-                                <label for="detail">&nbsp;&nbsp;&nbsp;Detalle</label>
+                        @if($tickets->status == 'Cerrado' && Auth()->user()->role == 'admin')
+                            <div class="row text-center">
+                                <h2 class="text-center">Agregar Detalle</h2>
+                                <div class="col-12 m-auto form-floating">
+                                    <textarea name="detail" id="detail" class="form-control px-2" placeholder=" "  style="height: 150px" required>{{$tickets->detail}}</textarea>
+                                    <label for="detail">&nbsp;&nbsp;&nbsp;Detalle</label>
+                                </div>
                             </div>
-                        </div>
+                        @elseif($tickets->status == 'Cerrado' && Auth()->user()->role == 'user')
+                            <div class="row text-center">
+                                <h2 class="text-center">Agregar Detalle</h2>
+                                <div class="col-12 m-auto form-floating">
+                                    <textarea name="detail" id="detail" class="form-control px-2" placeholder=" " style="height: 150px" required disabled>{{$tickets->detail}}</textarea>
+                                    <label for="detail">&nbsp;&nbsp;&nbsp;Detalle</label>
+                                </div>
+                            </div>
+                        @endif
                     @endif
                     <div class="row text-center mt-3">
+                        <h2 class="text-center">Estado</h2>
                         <div class="col-12 m-auto form-floating">
                             @if($tickets->status == 'Abierto')
-                                <button type="button" class="btn btn-danger col-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modal">
-                                    Cerrar Ticket
-                                </button>
+                                <select class="form-control col-4 m-auto" name="status" id="status" enabled>
+                                    <option value="Abierto">Abierto</option>
+                                    <option value="Cerrado">Cerrado</option>
+                                </select>
+                                <label for="status">&nbsp;&nbsp;&nbsp;Estado</label>
                             @else
-                                <button type="button" class="btn btn-danger col-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#modal" disabled>
-                                    Cerrar Ticket
-                                </button>
+                                @if($tickets->status == 'Cerrado' && Auth()->user()->role == 'admin')
+                                    <select class="form-control col-4 m-auto" name="status" id="status" enabled>
+                                        <option value="Abierto">Abierto</option>
+                                        <option value="Cerrado">Cerrado</option>
+                                    </select>
+                                    <label for="status">&nbsp;&nbsp;&nbsp;Estado</label>
+                                @elseif($tickets->status == 'Cerrado' && Auth()->user()->role == 'user')
+                                    <label for="status">&nbsp;&nbsp;&nbsp;Estado</label>
+                                    <select class="form-control col-4 m-auto" name="status" id="status" disabled>
+                                        <option value="Abierto">Abierto</option>
+                                        <option value="Cerrado">Cerrado</option>
+                                    </select>
+                                    <label for="status">&nbsp;&nbsp;&nbsp;Estado</label>
+                                @endif
                             @endif
-                            
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">Confirmación</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h4> Con esta acción cambiará el estado del ticket a "Cerrado" y no podrá ser modificable. </h4>
-                                        <br>
-                                        <h2>
-                                            ¿Desea continuar?
-                                        </h2>
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button action="{{route('closeTicket', ['id'=>$tickets->id])}}" class="btn btn-success">Confirmar</a>
-                                    
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     @if($tickets->status == 'Abierto')
                         <div class="row text-center mt-3">
                             <div class="col-12 m-auto form-floating">
-                                <button type="submit" class="btn btn-primary col-12 rounded-pill">Guardar</button>
+                                <button  type="submit" class="btn btn-primary col-12 rounded-pill">Guardar</button>
                             </div>
                         </div>    
                     @else
-                        <div class="row text-center mt-3">
-                            <div class="col-12 m-auto form-floating">
-                                <button type="submit" class="btn btn-primary col-12 rounded-pill" disabled>Guardar</button>
+                        @if($tickets->status == 'Cerrado' && Auth()->user()->role == 'admin')
+                            <div class="row text-center mt-3">
+                                <div class="col-12 m-auto form-floating">
+                                    <button action="{{route('editTicket', ['id'=>$tickets->id])}}" type="submit" class="btn btn-primary col-12 rounded-pill">Guardar</button>
+                                </div>
                             </div>
-                        </div>
+                        @elseif($tickets->status == 'Cerrado' && Auth()->user()->role == 'user')
+                            <div class="row text-center mt-3">
+                                <div class="col-12 m-auto form-floating">
+                                    <button action="{{route('editTicket', ['id'=>$tickets->id])}}" type="submit" class="btn btn-primary col-12 rounded-pill" disabled>Guardar</button>
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 </form>
             </div>

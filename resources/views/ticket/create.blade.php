@@ -3,23 +3,27 @@
 @section('title', 'Create Ticket')
 
 @section('content')
-
+{{-- 9320904 --}}
 <div class="row mt-4">
     <form class="col-12"  role="form" method="POST" action="{{ url('/create_ticket') }}">
         {{ csrf_field() }}
 
-        @if(session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
+        @if(session()->has('modal'))
+            <div class="p-3 mt-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+                <div class="modal-dialog bg-white">
+                    <div class="modal-content">
+                        <div class="modal-header alert-success">
+                            <h5 class="modal-title" id="exampleModalLabel">Completado!</h5>
+                        </div>
+                    </div>
+                    <div class="p-2 rouded-3 border-black">
+                        <h2>{{ session()->get('modal') }}</h2>
+                    </div>
+                </div>
             </div>
-        @endif
+            <a href="{{route('viewTicket', compact('client'))}}" class="btn btn-success rounded-pill col-12">Listo</a>
+        @else
 
-        {{-- alert message --}}
-        @if(session()->has('message'))
-            <div class="alert alert-danger fw-bolder text-center">
-                {{ session()->get('message') }}
-            </div>
-        @endif
         <div class="col-12 bg-white rounded-3 shadow">
             <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
                 <div class="alert alert-success mt-3 col-12" role="alert">
@@ -27,34 +31,63 @@
                 </div>
             {{-- DATOS DE CLIENTE HABILITADOS --}}
             <h3 class="col-12 text-decoration-none">Datos del Cliente</h3>
+            
+            @if ($client == null || $id == null)
+                <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="name_denunciante" name="name_denunciante" class="form-control col-12" placeholder="Nombre" required >
+                        <label autofocus class="" for="name_denunciante">&nbsp;&nbsp;&nbsp;Nombre</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="apellido_denunciante" name="apellido_denunciante" class="form-control col-12" required >
+                        <label class="" for="apellido_denunciante">&nbsp;&nbsp;&nbsp;Apellido</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="dni_denunciante" name="dni_denunciante" class="form-control col-12" required >
+                        <label class="" for="dni_denunciante">&nbsp;&nbsp;&nbsp;DNI</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="correo_denunciante" name="correo_denunciante" class="form-control col-12" >
+                        <label class="" for="correo_denunciante">&nbsp;&nbsp;&nbsp;Correo</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="telefono_denunciante" name="telefono_denunciante" class="form-control col-12" required >
+                        <label class="" for="telefono_denunciante">&nbsp;&nbsp;&nbsp;Teléfono</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="direccion_denunciante" name="direccion_denunciante" class="form-control col-12" >
+                        <label class="" for="direccion_denunciante">&nbsp;&nbsp;&nbsp;Dirección</label>
+                    </div>
+                </div>
+            @else
+                <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="name_denunciante" name="name_denunciante" class="form-control col-12" placeholder="Nombre" required readonly value="{{$client->name}}">
+                        <label autofocus class="" for="name_denunciante">&nbsp;&nbsp;&nbsp;Nombre</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="apellido_denunciante" name="apellido_denunciante" class="form-control col-12" required readonly value="{{$client->lastname}}">
+                        <label class="" for="apellido_denunciante">&nbsp;&nbsp;&nbsp;Apellido</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="dni_denunciante" name="dni_denunciante" class="form-control col-12" required readonly value="{{$client->dni}}">
+                        <label class="" for="dni_denunciante">&nbsp;&nbsp;&nbsp;DNI</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="correo_denunciante" name="correo_denunciante" class="form-control col-12" value="{{$client->mail}}">
+                        <label class="" for="correo_denunciante">&nbsp;&nbsp;&nbsp;Correo</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="telefono_denunciante" name="telefono_denunciante" class="form-control col-12" required value="{{$client->phone}}">
+                        <label class="" for="telefono_denunciante">&nbsp;&nbsp;&nbsp;Teléfono</label>
+                    </div>
+                    <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
+                        <input placeholder=" " type="text" id="direccion_denunciante" name="direccion_denunciante" class="form-control col-12" value="{{$client->location}}">
+                        <label class="" for="direccion_denunciante">&nbsp;&nbsp;&nbsp;Dirección</label>
+                    </div>
+                </div>
+            @endif
 
-            <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
-                <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
-                    <input type="text" id="name_denunciante" name="name_denunciante" class="form-control col-12" placeholder="Nombre" required>
-                    <label autofocus class="" for="name_denunciante">Nombre</label>
-                </div>
-                <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
-                    <input type="text" id="apellido_denunciante" name="apellido_denunciante" class="form-control col-12" required>
-                    <label class="" for="apellido_denunciante">Apellido</label>
-                </div>
-                <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
-                    <input type="text" id="dni_denunciante" name="dni_denunciante" class="form-control col-12" required>
-                    <label class="" for="dni_denunciante">DNI</label>
-                </div>
-                <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
-                    <input type="text" id="correo_denunciante" name="correo_denunciante" class="form-control col-12">
-                    <label class="" for="correo_denunciante">Correo</label>
-                </div>
-                <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
-                    <input type="text" id="telefono_denunciante" name="telefono_denunciante"
-                        class="form-control col-12" required>
-                    <label class="" for="telefono_denunciante">Teléfono</label>
-                </div>
-                <div class="form-floating col-12 col-md-4 mt-3 mb-1 m-auto">
-                    <input type="text" id="direccion_denunciante" name="direccion_denunciante" class="form-control col-12">
-                    <label class="" for="direccion_denunciante">Dirección</label>
-                </div>
-            </div>
             {{-- FIN DATO DE CLIENTE HABILITADOS --}}
 
             {{-- DATOS DEL DENUNCIADO --}}
@@ -62,25 +95,25 @@
                 <h3 class="col-12 text-decoration-none">Datos del denunciado</h3>
 
                 <div class="form-floating col-12 col-md-6 mt-3 mb-1 m-auto">
-                    <input type="text" id="razon_social" name="razon_social" class="form-control col-12">
-                    <label class="" for="razon_social">Nombre o Razon social</label>
+                    <input placeholder=" " type="text" id="razon_social" name="razon_social" class="form-control col-12">
+                    <label class="" for="razon_social">&nbsp;&nbsp;&nbsp;Nombre o Razon social</label>
                 </div>
                 <div class="form-floating col-12 col-md-6 mt-3 mb-1 m-auto">
-                    <input type="text" id="objeto_denunciado" name="objeto_denunciado" class="form-control col-12">
-                    <label class="" for="objeto_denunciado">Producto / servicio</label>
+                    <input placeholder=" " type="text" id="objeto_denunciado" name="objeto_denunciado" class="form-control col-12">
+                    <label class="" for="objeto_denunciado">&nbsp;&nbsp;&nbsp;Producto / servicio</label>
                 </div>
                 <div class="form-floating col-12 col-md-6 mt-3 mb-1 m-auto">
-                    <input type="text" id="direccion_denunciado" name="direccion_denunciado"
+                    <input placeholder=" " type="text" id="direccion_denunciado" name="direccion_denunciado"
                         class="form-control col-12">
-                    <label class="" for="direccion_denunciado">Direccion</label>
+                    <label class="" for="direccion_denunciado">&nbsp;&nbsp;&nbsp;Direccion</label>
                 </div>
                 <div class="form-floating col-12 col-md-6 mt-3 mb-1 m-auto">
-                    <input type="text" id="departamento_denunciado" name="departamento_denunciado" class="form-control col-12">
-                    <label class="" for="departamento_denunciado">Departamento</label>
+                    <input placeholder=" " type="text" id="departamento_denunciado" name="departamento_denunciado" class="form-control col-12">
+                    <label class="" for="departamento_denunciado">&nbsp;&nbsp;&nbsp;Departamento</label>
                 </div>
                 <div class="form-floating col-12 col-md-6 mt-3 mb-1 m-auto">
-                    <select class="rounded-3 form-control" name="provincia_denunciado" id="provincia_denunciado" required >
-                        <option value="">Seleccionar...</option>
+                    <select placeholder=" " class="rounded-3 form-control" name="provincia_denunciado" id="provincia_denunciado" required >
+                        <option readonly value="">Seleccionar...</option>
                         <option value="Buenos Aires"> Buenos Aires </option>
                         <option value="Capital"> Capital Federal </option>
                         <option value="Catamarca"> Catamarca </option>
@@ -115,8 +148,8 @@
             <div class="row m-2 p-3 rounded-3 justify-content-center text-center">
                 <h3 class="col-12 text-decoration-none">Datos del Reclamo</h3>
                 <div class="form-floating col-12 mt-3 mb-1 m-auto">
-                    <input type="text" id="asunto" name="asunto" class="form-control col-12 text-uppercase">
-                    <label class="" for="asunto">Asunto</label>
+                    <input placeholder=" " type="text" id="asunto" name="asunto" class="form-control col-12 text-uppercase">
+                    <label class="" for="asunto">&nbsp;&nbsp;&nbsp;Asunto</label>
                 </div>
                 <div class="form-floating col-12 col-md-6 mt-3 mb-1 m-auto">
                     <select class="rounded-3 form-control" name="sector" id="sector" required>
@@ -151,16 +184,18 @@
                     <label for="comprobante_reclamo">¿Tiene Comprobante?</label>
                 </div>
                 <div class="form-floating col-12 mt-3 mb-1 m-auto">
-                    <textarea type="text" id="motivo" name="motivo" class="form-control"
-                        style="height: 150px"></textarea>
-                    <label for="motivo">Ingrese el Motivo</label>
+                    <textarea type="text" id="motivo" name="motivo" class="form-control" style="height: 150px" placeholder=" " required></textarea>
+                    <label for="motivo">&nbsp;&nbsp;&nbsp;Ingrese el Motivo</label>
                 </div>
             </div>
             <div class="row m-2 p-3 rounded-3 justify-content-center text-center">
                 <button type="submit" class="btn btn-primary btn-lg btn-block rounded-pill">Enviar</button>
             </div>
         </div>
+        </div>
     </form>
+    @endif
+
 </div>
 
 @endsection
