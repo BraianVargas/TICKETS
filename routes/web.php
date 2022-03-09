@@ -48,7 +48,7 @@ Route::get('/admin', [AdminController::class, 'index'])
 
 
 Route::middleware(['auth.admin'])->group(function (){
-    Route::middleware(['auth', 'auth.user'])->group(function (){
+Route::middleware(['auth'])->group(function (){
 // **** USER ROUTES ****
 // INDEX
 Route::get('/user', [UserController::class, 'index'])
@@ -172,6 +172,9 @@ Route::post('/export/filter/byIdCaller', [ReportsController::class, 'FilterExpor
 Route::post('/export/filter/byDniCaller', [ReportsController::class, 'FilterExportSubmitByDniCaller'])
     ->middleware('auth.admin')  
     ->name('reports.filterByDniCaller');
+Route::post('/export/filter/byIdTicket', [ReportsController::class, 'FilterExportSubmitByIdTicket'])
+        ->middleware('auth.admin')  
+        ->name('reports.filterByIdTicket');
 
 
 

@@ -31,6 +31,7 @@
             <label for="">Filtrar por:</label>
             <select name="filtro" id="filtro" class="form-control" onchange="ShowSelected()" autofocus>
                 <option value="1" selected>Seleccione una opción</option>
+                <option value="idTicket">Id de Ticket</option>
                 <option value="fecha">Fecha</option>
                 <option value="idCreator">ID creador</option>
                 <option value="idCaller">ID de cliente</option>
@@ -42,6 +43,16 @@
         function ShowSelected(){
             /* Para obtener el valor */
             var cod = document.getElementById("filtro").value;
+            if(cod=='1'){
+                document.getElementById("selectOption").style.display = "block";
+            }else{
+                document.getElementById("selectOption").style.display = "none";
+            }
+            if(cod=='idTicket'){
+                document.getElementById("idTicket").style.display = "block";
+            }else{
+                document.getElementById("idTicket").style.display = "none";
+            }
             if(cod == "fecha"){
                 document.getElementById("FiltroFecha").style.display = "block";
              }else{
@@ -67,6 +78,29 @@
             };
         }
     </script>
+    <div class="bg-white mt-2 p-3 rounded shadow" id="selectOption">
+        <h3 class="text-muted text-center">
+            <i class="bi bi-arrow-up"></i>
+            Seleccione una opcion
+            <i class="bi bi-arrow-up"></i>
+        </h3>
+    </div>
+    <form action="{{route('reports.filterByIdTicket')}}" method="POST" class="was-validated mt-3"  id="idTicket"  style="display: none">
+        {{ csrf_field() }}
+        <div class="bg-white mt-2 p-3 rounded shadow">
+            <h3 class="text-muted text-center"><i class="bi bi-ticket">&nbsp;&nbsp;Filtrar por Id de Ticket </i></h3>
+            <div class="input-group col-12 container text-center" >
+                <div class="col-12 col-md-6 form-floating m-auto">
+                    <input type="text" name="dniCaller" id="dniCaller" class="text-center rounded-pill shadow form-control" required autofocus placeholder=" ">
+                    <label for="dniCaller" class="text-muted"><i class="bi bi-ticket">&nbsp;&nbsp;Filtrar por Id de Ticket </i></label>
+                </div>
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="col-12 col-md-4 btn btn-success shadow rounded-pill">
+            <i class="bi bi-funnel">&nbsp; Filtrar</i>
+        </button>
+    </form>
     <form action="{{route('reports.filter')}}" method="POST" class="was-validated mt-3" id="FiltroFecha"  style="display: none">
         {{ csrf_field() }}
         <div class="bg-white mt-2 p-3 rounded shadow">
@@ -131,14 +165,6 @@
             <i class="bi bi-funnel">&nbsp; Filtrar</i>
         </button>
     </form>
-        <div class="bg-white mt-2 p-3 rounded shadow"  style="display: none" id="FiltroIdCaller">
-            <h3 class="text-muted text-center"><i class="bi bi-calendar-date">&nbsp;&nbsp;Fecha de creación </i></h3>
-            <div class="input-group col-12 container text-center" >
-                <div class="col-12 col-md-6 form-floating m-auto">
-                    Filtro por ID de cliente
-                </div>
-            </div>
-        </div>
 
     <div class="container">
         

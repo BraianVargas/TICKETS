@@ -21,21 +21,23 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <a href="{{route('reports.tickets')}}" class="list-group-item-action active text-decoration-none">
-                    <i class="bi bi-file-earmark-arrow-up">&nbsp; Exportar Tickets</i>
+                    <i class="toHoverOptions bi bi-file-earmark-arrow-up">&nbsp; Exportar Tickets</i>
                 </a>
             </li>
             <li class="list-group-item">
                 <a href="{{route('reports.clients')}}" class="list-group-item-action active text-decoration-none">
-                    <i class="bi bi-person-lines-fill">&nbsp;Exportar clientes</i>
+                    <i class="toHoverOptions bi bi-person-lines-fill">&nbsp;Exportar clientes</i>
                 </a>
             </li>
             <li class="list-group-item">
                 <a href="{{route('reports.filter')}}" class="list-group-item-action active text-decoration-none">
-                    <i class="bi bi-funnel">&nbsp; Filtrar</i>
+                    <i class="toHoverOptions bi bi-funnel">&nbsp; Filtrar</i>
                 </a>
             </li>
             <li class="list-group-item">
-                <a href="{{route('logout')}}" class="list-group-item-action active text-decoration-none"><i class="bi bi-door-open">&nbsp; Cerrar Sesión</i></a>
+                <a href="{{route('logout')}}" class="list-group-item-action active text-decoration-none">
+                    <i class="toHoverOptions bi bi-door-open">&nbsp; Cerrar Sesión</i>
+                </a>
             </li>
         </ul>
     </div>

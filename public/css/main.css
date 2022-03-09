@@ -1,0 +1,24 @@
+.toHover{
+    padding: 1.2em;
+    border-radius: 10px;
+    margin: .2em;
+}
+.toHover:hover{
+    scale: 1.1;
+    align-self: baseline;
+    background-color: #535b61;
+    font-weight: bolder;
+
+    color: #fff;
+}
+
+.toHoverOptions{
+    padding: 0.8em;
+    border-radius: 15px;
+}
+.toHoverOptions:hover{
+    scale: 1.2;
+    align-self: baseline;
+    background-color: #a7a6a7;
+    font-weight: bolder;
+}

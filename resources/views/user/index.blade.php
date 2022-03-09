@@ -15,26 +15,26 @@
         <br>
     
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">
+            <li class="list-group-item shadow">
                 <a href="{{route('tickets')}}" class="list-group-item-action active text-decoration-none">
-                    <i class="bi bi-receipt">&nbsp;Tickets</i> 
+                    <i class="toHoverOptions bi bi-receipt">&nbsp;Tickets</i> 
                 </a>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item shadow">
                 <a href="{{route('client.index')}}" class="list-group-item-action active text-decoration-none">
-                    <i class="bi bi-people">&nbsp;Clientes</i>
+                    <i class="toHoverOptions bi bi-people">&nbsp;Clientes</i>
                 </a>
             </li>
             @if(auth()->user()->role == 'admin')
-                <li class="list-group-item">
+                <li class="list-group-item shadow">
                     <a href="{{route('reports.index')}}" class="list-group-item-action active text-decoration-none">
-                        <i class="bi bi-file-earmark-spreadsheet">&nbsp;Reportes</i>
+                        <i class="toHoverOptions bi bi-file-earmark-spreadsheet">&nbsp;Reportes</i>
                     </a>
                 </li>
             @endif
-            <li class="list-group-item">
+            <li class="list-group-item shadow">
                 <a href="{{route('logout')}}" class="list-group-item-action active text-decoration-none">
-                    <i class="bi bi-door-open">&nbsp;Cerrar Sesión</i>
+                    <i class="toHoverOptions bi bi-door-open">&nbsp;Cerrar Sesión</i>
                 </a>
             </li>
         </ul>
