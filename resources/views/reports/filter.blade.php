@@ -8,14 +8,13 @@
     <h1 class="fw-bold text-uppercase">
        Filtrar Reportes
     </h1>
-    {{-- if exist an error show it --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    @if(session()->has('success'))
+        <div class="alert alert-success fw-bolder text-center">
+            {{ session()->get('success') }}
+        </div>
+    @elseif(session()->has('error'))
+        <div class="alert alert-danger fw-bolder text-center">
+            {{ session()->get('error') }}
         </div>
     @endif
     <p class="fw-lighter fs-6 alert bg-info bg-opacity-50 p-2 w-50 m-auto mb-3">
@@ -91,8 +90,8 @@
             <h3 class="text-muted text-center"><i class="bi bi-ticket">&nbsp;&nbsp;Filtrar por Id de Ticket </i></h3>
             <div class="input-group col-12 container text-center" >
                 <div class="col-12 col-md-6 form-floating m-auto">
-                    <input type="text" name="dniCaller" id="dniCaller" class="text-center rounded-pill shadow form-control" required autofocus placeholder=" ">
-                    <label for="dniCaller" class="text-muted"><i class="bi bi-ticket">&nbsp;&nbsp;Filtrar por Id de Ticket </i></label>
+                    <input type="text" name="idTicket" id="idTicket" class="text-center rounded-pill shadow form-control" required autofocus placeholder=" ">
+                    <label for="idTicket" class="text-muted"><i class="bi bi-ticket">&nbsp;&nbsp;Filtrar por Id de Ticket </i></label>
                 </div>
             </div>
         </div>

@@ -72,6 +72,7 @@ class TicketController extends Controller
                     'detail' => request('detalle_reclamo'),
                     'ticket_id' => $tickets->id,
                     'user_id' => Auth::user()->id,
+                    'modifier_id' => Auth::user()->id,
                     'creation_datetime' => $fecha,
                     'lastmodif_datetime' => $fecha,
                 ]
@@ -114,6 +115,7 @@ class TicketController extends Controller
                     'detail' => request('motivo'),
                     'ticket_id' => $tickets->id,
                     'user_id' => Auth::user()->id,
+                    'modifier_id' => Auth::user()->id,
                     'creation_datetime' => $fecha,
                     'lastmodif_datetime' => $fecha,
                 ]
@@ -250,6 +252,7 @@ class TicketController extends Controller
                 'detail' => request('detail'),
                 'ticket_id' => $id,
                 'user_id' => Auth::user()->id,
+                'modifier_id' => Auth::id(),
                 'creation_datetime' => $fecha,
                 'lastmodif_datetime' => $fecha,
             ]

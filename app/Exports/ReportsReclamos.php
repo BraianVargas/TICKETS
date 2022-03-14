@@ -2,16 +2,15 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 use App\Models\Tickets;
 use App\Models\Callers;
 use App\Models\Denunciado;
 use App\Models\Reclamos;
 
-
-class Reports implements WithHeadings, FromCollection
+class ReportsReclamos implements WithHeadings, FromCollection
 {
     //create constructor of class
 
@@ -28,21 +27,18 @@ class Reports implements WithHeadings, FromCollection
         return new Collection($this->collection);
     }
 
-  
+
     public function headings():array {
         return [
-            'ID',
-            'Motivo',
+            'Id de Ticket',
+            'Asunto',
             'Estado',
-            'Prioridad',
-            'Sector',
-            'Comprobante',
-            'Usuario creador',
-            'Usuario editor',
-            'Nombre Denunciante',
-            'Denunciado',
-            'Fecha de creacion',
-            'Ultima modificacion',
+            '   ',
+            'Detalle de reclamo',
+            'Nombre de editor',
+            'Nombre de cliente',
+            'Fecha de Creacion',
+            'Ultima Modificacion',
         ];
     }
 }

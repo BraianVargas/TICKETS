@@ -20,6 +20,7 @@ class Reclamo extends Model
         'detail',
         'ticket_id',
         'user_id',
+        'modifier_id',
         'creation_datetime',
         'lastmodif_datetime',
     ];

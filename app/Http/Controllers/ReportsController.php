@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Reports;
+use App\Exports\ReportsReclamos;
 use App\Exports\CallersExport;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use App\Models\Tickets;
 use App\Models\Callers;
+use App\Models\Reclamo;
+use App\Models\User;
 use App\Models\Denunciado;
 
 class ReportsController extends Controller
@@ -17,13 +20,19 @@ class ReportsController extends Controller
     public function createExportable($collection = null){
         // dd($collection);
         //Create object of the class REPORTS and generate the collection of the data
-        
+
         $reports = new Reports([$collection]);
         return $reports;
     }
+
+    public function createExportableReclamos($collection = null){
+       $reports = new ReportsReclamos([$collection]);
+        return $reports;
+    }
+
     public function index(){
         return view('reports.index');
-    }   
+    }
 
     public function getFilename($name = "Report"){
         $date = Carbon::now();
@@ -39,7 +48,7 @@ class ReportsController extends Controller
         }else{
             $name = null;
         }
-        $target = Denunciado::where('id', $ticket->target_id)->first();            
+        $target = Denunciado::where('id', $ticket->target_id)->first();
         if($target != null ){
             $denunciado = $target->razonSocial;
         }else{
@@ -75,7 +84,7 @@ class ReportsController extends Controller
             }else{
                 $name = null;
             }
-            $target = Denunciado::where('id', $ticket->target_id)->first();            
+            $target = Denunciado::where('id', $ticket->target_id)->first();
             if($target != null ){
                 $denunciado = $target->razonSocial;
             }else{
@@ -125,7 +134,7 @@ class ReportsController extends Controller
                 }else{
                     $name = null;
                 }
-                $target = Denunciado::where('id', $ticket->target_id)->first();            
+                $target = Denunciado::where('id', $ticket->target_id)->first();
                 if($target != null ){
                     $denunciado = $target->razonSocial;
                 }else{
@@ -149,7 +158,7 @@ class ReportsController extends Controller
             };
 
             return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
-            
+
         }elseif (count($tickets) == 0){
             //If there is no data
             return redirect()->back()->with('error', 'No hay datos para la fecha seleccionada');
@@ -173,7 +182,7 @@ class ReportsController extends Controller
                 }else{
                     $name = null;
                 }
-                $target = Denunciado::where('id', $ticket->target_id)->first();            
+                $target = Denunciado::where('id', $ticket->target_id)->first();
                 if($target != null ){
                     $denunciado = $target->razonSocial;
                 }else{
@@ -218,7 +227,7 @@ class ReportsController extends Controller
                 }else{
                     $name = null;
                 }
-                $target = Denunciado::where('id', $ticket->target_id)->first();            
+                $target = Denunciado::where('id', $ticket->target_id)->first();
                 if($target != null ){
                     $denunciado = $target->razonSocial;
                 }else{
@@ -242,7 +251,7 @@ class ReportsController extends Controller
             };
 
             return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
-            
+
         }elseif (count($tickets) == 0){
             //If there is no data
             return redirect()->back()->with('error', 'No hay datos para la fecha seleccionada');
@@ -252,8 +261,10 @@ class ReportsController extends Controller
             return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
 
         }
-        
+
     }
+
+
     public function FilterExportSubmitByDniCaller()
     {
         $result=[];
@@ -269,7 +280,7 @@ class ReportsController extends Controller
                     }else{
                         $name = null;
                     }
-                    $target = Denunciado::where('id', $ticket->target_id)->first();            
+                    $target = Denunciado::where('id', $ticket->target_id)->first();
                     if($target != null ){
                         $denunciado = $target->razonSocial;
                     }else{
@@ -291,19 +302,71 @@ class ReportsController extends Controller
                     ];
                     array_push($result, $item);
                 };
-    
+
                 return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
-                
+
             }elseif (count($tickets) == 0){
-                //If there is no data
-                return redirect()->back()->with('error', 'No hay datos para la fecha seleccionada');
+                return redirect()->back()->with('error', 'No hay registro de tickets para el DNI ingresado');
             }else{
                 $result = getIndividuallyTicket($tickets[0]);
-    
+
                 return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
-    
+
             }
         }
-        
+
+    }
+
+    public function FilterExportSubmitByIdTicket()
+    {
+        $result = [];
+        $idTicket= request('idTicket');
+        $ticket = Tickets::where('id', $idTicket)->first();
+        if($ticket!=null){
+            $item=[
+                    $ticket->id,
+                    $ticket->subject,
+                    $ticket->status,
+                    '   ',
+                    '   ',
+                    '   ',
+                    '   ',
+                    '   ',
+                    '   ',
+            ];
+            array_push($result, $item);
+            $reclamos = Reclamo::where('ticket_id', $ticket->id)->get();
+            foreach ($reclamos as $reclamo){
+                $item = [
+                    '   ',
+                    '   ',
+                    '   ',
+                    '',
+                    $reclamo->detail,
+                    User::where('id', $reclamo->modifier_id)->first()->name,
+                    Callers::where('id', $ticket->caller_id)->first()->name . ' ' . Callers::where('id', $ticket->caller_id)->first()->lastname,
+                    $reclamo->creation_datetime,
+                    $reclamo->lastmodif_datetime,
+                ];
+                array_push($result, $item);
+                // try {
+                // } catch (\Throwable $th) {
+                //     return back()->with('error', 'Error 205 - No se pudo descargar el archivo');
+                // }
+
+            };
+            return Excel::download($this->createExportableReclamos($result), $this->getFilename("Filtered").'.xlsx');
+        }elseif($ticket==null){
+            return back()->with('error', 'No exsite el ticket #' . $idTicket);
+        }elseif (count($tickets) == 0){
+            //If there is no data
+            return redirect()->back()->with('error', 'No hay datos para la fecha seleccionada');
+        }else{
+            $result = getIndividuallyTicket($tickets[0]);
+
+            return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
+
+        }
+
     }
 }

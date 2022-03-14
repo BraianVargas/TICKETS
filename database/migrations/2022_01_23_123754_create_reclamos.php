@@ -100,9 +100,12 @@ class CreateReclamos extends Migration
                 ->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')
+                ->default(null)
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+
+            $table->integer('modifier_id')->unsigned();
 
             $table->date('creation_datetime')->default($fecha);
             $table->date('lastmodif_datetime')->default($fecha);
