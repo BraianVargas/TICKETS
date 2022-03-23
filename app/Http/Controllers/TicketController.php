@@ -166,25 +166,21 @@ class TicketController extends Controller
         $client = Callers::where('dni', request('dni'))->first();
         if($client!=null){
             $tickets = Tickets::where('caller_id', $client->id)->get();
-            // dd($tickets);
-            // $tickets = Tickets::orderBy('id', 'desc')->paginate(10);
-
-            if($tickets){
-                return redirect(route('newTicket', ['id'=>$client->id],compact('tickets','client')));
-                // return view('ticket.new-ticket', compact('tickets','client'));
-            }else{
-                return back()->withErrors(['message' => 'No se encontraron tickets']);
+            if(count($tickets)<=0){
+                return redirect(route('newTicket', ['id'=>$client->id],compact('tickets','client',)))->with('error', 'No se encontraron tickets');
+            }elseif(count($tickets)>0){
+                return redirect(route('newTicket', ['id'=>$client->id],compact('tickets','client',)))->with('success', 'Cliente encontrado, posee tickets');
             }
         }else{
-            return back()->withErrors(['message' => 'No se encontró el cliente']);
+            return back()->withErrors(['error' => 'No se encontró el cliente']);
         }
     }
+
     public function newTicket($id){
         $client = Callers::where('id', $id)->first();
         $tickets = Tickets::where('caller_id', '=', $id)->paginate(10);
         // $tickets = Tickets::orderBy('id', 'desc')->paginate(10);
-        // dd($tickets);
-
+        
         return view('ticket.new-ticket', ['id'=>$id], compact('tickets','client'));
     }
 
@@ -207,7 +203,6 @@ class TicketController extends Controller
             $tickets = Tickets::where('caller_id', $client->id);
             $tickets = Tickets::orderBy('id', 'desc')->paginate(10);
             return redirect(route('newTicket', ['id'=>$client->id],compact('tickets','client')));
-
         }
 
     }

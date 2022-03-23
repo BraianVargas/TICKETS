@@ -7,7 +7,15 @@
 <div class="row mt-4">
     <form class="col-12"  role="form" method="POST" action="{{ url('/create_ticket') }}">
         {{ csrf_field() }}
-
+        @if(session()->has('success'))
+            <div class="alert alert-success fw-bolder text-center">
+                {{ session()->get('success') }}
+            </div>
+        @elseif(session()->has('error'))
+            <div class="alert alert-danger fw-bolder text-center">
+                {{ session()->get('error') }}
+            </div>
+        @endif
         @if(session()->has('modal'))
             <div class="p-3 mt-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
                 <div class="modal-dialog bg-white">

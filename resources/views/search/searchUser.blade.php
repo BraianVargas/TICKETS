@@ -4,6 +4,15 @@
 
 @section('content')
     <div class="container-fluid mt-4">
+        @if(session()->has('success'))
+            <div class="alert alert-success fw-bolder text-center">
+                {{ session()->get('success') }}
+            </div>
+        @elseif(session()->has('error'))
+            <div class="alert alert-danger fw-bolder text-center">
+                {{ session()->get('error') }}
+            </div>
+        @endif
         <div class="col-12 bg-white rounded-3 shadow">
             <div class="row m-2 p-3 rounded-3  justify-content-center text-center">
                 <div class="alert alert-warning" role="alert">
@@ -30,17 +39,7 @@
                             </button>
                         </div>
                     </div>
-                    @error('message')
-                    <div class="alert alert-danger mt-3" role="alert">
-                        <strong>{{ $message }}</strong> 
-                    </div>
-                    <div class="col-6 m-auto">
-                        <a href="{{route('create_client')}}" class="btn btn-success col-12 mb-3 rounded-pill">
-                            Cargar nuevo cliente
-                        </a>
-                    </div>
-                    @enderror
-
+                    
                 </form>
             </div>  
         </div>  

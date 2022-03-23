@@ -51,12 +51,9 @@ class CallersController extends Controller
     }
     public function postSearchByDni(){
         $callers = Callers::where('dni', request('dni'))->first();
-        if ($callers == null)
-        {
+        if ($callers == null){
             return back()->with('error', 'El cliente no existe');
-        }
-        else
-        {
+        }else{
             return view('callers.showCaller', compact('callers'));
         }
     }

@@ -7,6 +7,15 @@
 <div class="container m-auto row bg-white p-3 mt-3 rounded-3">
     <div class="table-responsive">
         <table class="table table-bordered rounded-3 mt-3">
+            @if(session()->has('success'))
+                <div class="alert alert-success fw-bolder text-center">
+                    {{ session()->get('success') }}
+                </div>
+            @elseif(session()->has('error'))
+                <div class="alert alert-danger fw-bolder text-center">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
             {{ csrf_field() }}
             <thead class="">
                 <th>#</th>
