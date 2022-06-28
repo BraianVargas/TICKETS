@@ -247,7 +247,7 @@ class TicketController extends Controller
                 'detail' => request('detail'),
                 'ticket_id' => $id,
                 'user_id' => Auth::user()->id,
-                'modifier_id' => Auth::id(),
+                'modifier_id'=> Auth::id(),
                 'creation_datetime' => $fecha,
                 'lastmodif_datetime' => $fecha,
             ]

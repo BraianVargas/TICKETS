@@ -308,7 +308,7 @@ class ReportsController extends Controller
             }elseif (count($tickets) == 0){
                 return redirect()->back()->with('error', 'No hay registro de tickets para el DNI ingresado');
             }else{
-                $result = getIndividuallyTicket($tickets[0]);
+                $result = $this->getIndividuallyTicket($tickets[0]);
 
                 return Excel::download($this->createExportable($result), $this->getFilename("Filtered").'.xlsx');
 
